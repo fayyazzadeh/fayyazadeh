@@ -72,7 +72,7 @@ export default function Home() {
             <div className="profile-frame">
               <div className="profile-inner">
                 <div className="profile-fallback" aria-hidden="true">RF</div>
-                <img src="https://github.com/fayyazzadeh.png" alt="رامین فیاض‌زاده" />
+                <img src="/profile-tech-headshot.jpg" alt="رامین فیاض‌زاده" />
                 <div className="profile-caption">Network • Infrastructure • Support</div>
               </div>
             </div>
