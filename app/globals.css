@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap');
+@import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css');
+@import url('https://cdn.jsdelivr.net/gh/rastikerdar/sahel-font@v3.4.0/dist/font-face.css');
 
 :root {
   --bg: #071014;
@@ -21,7 +22,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: "Vazirmatn", Tahoma, Arial, sans-serif;
+  font-family: "Vazirmatn", "Sahel", Tahoma, Arial, sans-serif;
   line-height: 1.9;
 }
 a { color: inherit; text-decoration: none; }
@@ -73,7 +74,7 @@ button, input, textarea { font: inherit; }
 .profile-card { position: relative; width: min(360px, 100%); margin-inline: auto; }
 .profile-frame { aspect-ratio: 4 / 5; border: 1px solid var(--line-strong); border-radius: 28px; padding: 10px; background: linear-gradient(145deg, rgba(0,217,232,.12), rgba(255,255,255,.02)); box-shadow: var(--shadow); transform: rotate(2deg); }
 .profile-inner { height: 100%; border-radius: 21px; overflow: hidden; position: relative; background: #0a1519; transform: rotate(-2deg); }
-.profile-inner img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; filter: saturate(.9) contrast(1.05); }
+.profile-inner img { content: url('/profile-tech-headshot.png'); width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; filter: saturate(.9) contrast(1.05); }
 .profile-fallback { position: absolute; inset: 0; display: grid; place-items: center; background: radial-gradient(circle, rgba(0,217,232,.2), transparent 50%), #0b181d; font-size: 6rem; font-weight: 800; color: var(--cyan); }
 .profile-caption { position: absolute; right: 20px; bottom: 20px; left: 20px; padding: 12px 15px; border: 1px solid rgba(255,255,255,.1); border-radius: 14px; background: rgba(5,14,17,.74); backdrop-filter: blur(12px); color: var(--cyan-soft); font-size: .78rem; }
 
