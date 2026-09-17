@@ -13,7 +13,9 @@ const experiences = [
   ["پشتیبان فنی", "موسسه آرتافون", "۰۷/۱۳۸۷ - ۱۲/۱۳۸۷", "مسئول فنی و نرم‌افزار."],
 ] as const;
 
-const skillGroups = [
+type SkillGroup = readonly [string, readonly string[]];
+
+const skillGroups: readonly SkillGroup[] = [
   ["Network & Infrastructure", ["Network+", "CCNA", "MTCNA", "Active & Passive Network", "MikroTik", "TCP/IP & Network Services", "راه‌اندازی و عیب‌یابی شبکه", "کابل‌کشی و داکت‌کشی", "Rack & Server Room"]],
   ["Server & Virtualization", ["Windows Server", "VMware ESXi", "Virtualization", "GNU/Linux"]],
   ["Hardware & IT Support", ["سخت‌افزار کامپیوتر", "نصب و راه‌اندازی سیستم‌ها", "تعمیر و عیب‌یابی", "ارتقاء سیستم‌ها", "Ticketing System", "پشتیبانی کاربران"]],
