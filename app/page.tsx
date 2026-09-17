@@ -180,6 +180,9 @@ export default function Home() {
               <a className="panel contact-link" href="https://t.me/fayyazzadeh" target="_blank" rel="noreferrer">
                 <div><strong>Telegram</strong><span>@fayyazzadeh</span></div><Arrow />
               </a>
+              <a className="panel contact-link" href="https://www.linkedin.com/in/ramin%D9%80fayyazzadeh" target="_blank" rel="noreferrer">
+                <div><strong>LinkedIn</strong><span>linkedin.com/in/ramin_fayyazzadeh</span></div><Arrow />
+              </a>
             </div>
             <form className="panel contact-form" action="mailto:ramin@fayyazzadeh.ir" method="post" encType="text/plain">
               <div className="field"><label htmlFor="name">نام</label><input id="name" name="name" required placeholder="نام شما" /></div>
