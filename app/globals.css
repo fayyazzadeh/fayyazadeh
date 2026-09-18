@@ -75,11 +75,11 @@ section { padding: 110px 0; scroll-margin-top: 74px; }
 .experience-item { position: relative; margin-bottom: 14px; padding-right: 34px; }
 .experience-item::before { content: ""; position: absolute; right: 4px; top: 22px; width: 11px; height: 11px; border-radius: 50%; background: var(--bg); border: 2px solid var(--cyan); box-shadow: 0 0 14px rgba(0,217,232,.4); z-index: 1; }
 details { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
-summary { list-style: none; cursor: pointer; padding: 22px 24px; display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center; }
+summary { list-style: none; cursor: pointer; padding: 22px 24px; display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center; direction: rtl; text-align: right; }
 summary::-webkit-details-marker { display: none; }
 .job-title { font-weight: 800; }
 .job-company { color: var(--cyan-soft); font-size: .88rem; margin-top: 2px; }
-.job-date { color: var(--muted); font-size: .76rem; white-space: nowrap; }
+.job-date { color: var(--muted); font-size: .76rem; white-space: nowrap;direction: rtl; text-align: right;  unicode-bidi: isolate; }
 .job-body { border-top: 1px solid var(--line); padding: 20px 24px 23px; color: var(--muted); font-size: .9rem; }
 .job-body p { margin: 0; }
 .active { display: inline-flex; margin-right: 8px; padding: 3px 7px; border-radius: 999px; border: 1px solid rgba(0,217,232,.25); color: var(--cyan); font-size: .65rem; }
@@ -104,3 +104,9 @@ footer { padding: 30px 0 45px; border-top: 1px solid var(--line); color: var(--m
 @media (max-width: 900px) { .nav-links { display: none; } .hero-grid, .about-grid, .contact-grid { grid-template-columns: 1fr; } .hero { padding-top: 115px; } .profile-card { order: -1; width: min(300px, 100%); } .skill-groups { grid-template-columns: 1fr; } .courses { grid-template-columns: repeat(2, 1fr); } .section-head { align-items: start; flex-direction: column; } }
 @media (max-width: 620px) { .container { width: min(100% - 26px, 1120px); } section { padding: 78px 0; } .hero h1 { font-size: clamp(2.3rem, 13vw, 3.8rem); } .about-copy, .skill-group, .contact-form { padding: 22px; } .stats, .courses { grid-template-columns: 1fr; } .stat { min-height: 115px; } summary { grid-template-columns: 1fr; } .job-date { white-space: normal; } .footer-inner { flex-direction: column; } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; } }
+.job-title,
+.job-company,
+.job-body {
+  direction: rtl;
+  text-align: right;
+}
