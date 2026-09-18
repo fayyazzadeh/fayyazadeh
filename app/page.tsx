@@ -162,6 +162,7 @@ export default function Home() {
         body: JSON.stringify({
           name: data.get("name"),
           email: data.get("email"),
+          phone: data.get("phone"),
           message: data.get("message"),
           website: data.get("website"),
           turnstileToken: data.get("cf-turnstile-response"),
@@ -545,6 +546,19 @@ export default function Home() {
                     required
                     maxLength={254}
                     placeholder="name@example.com"
+                  />
+                </div>
+
+                <div className="field">
+                  <label htmlFor="phone">شماره تماس (اختیاری)</label>
+
+                  <input
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    maxLength={20}
+                    placeholder="مثلاً 09121234567"
+                    inputMode="tel"
                   />
                 </div>
 
