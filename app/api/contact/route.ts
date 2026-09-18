@@ -3,190 +3,150 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// Simple in-memory rate limit.
-// This protects against repeated requests hitting the same server instance.
-const rateLimit = new Map<string, { count: number; resetAt: number }>();
-
-const WINDOW_MS = 10 * 60 * 1000;
-const MAX_REQUESTS = 5;
-
-function getClientIp(request: Request) {
-  return (
-    request.headers.get("CF-Connecting-IP") ||
-    request.headers.get("X-Forwarded-For")?.split(",")[0]?.trim() ||
-    "unknown"
-  );
-}
-
-function isRateLimited(ip: string) {
-  const now = Date.now();
-  const current = rateLimit.get(ip);
-
-  if (!current || now > current.resetAt) {
-    rateLimit.set(ip, {
-      count: 1,
-      resetAt: now + WINDOW_MS,
-    });
-
-    return false;
-  }
-
-  if (current.count >= MAX_REQUESTS) {
-    return true;
-  }
-
-  current.count += 1;
-  return false;
-}
-
-async function verifyTurnstile(token: string, request: Request) {
-  const secret = process.env.TURNSTILE_SECRET_KEY;
-
-  if (!secret) {
-    console.error("TURNSTILE_SECRET_KEY is not configured.");
-    return false;
-  }
-
-  const remoteip =
-    request.headers.get("CF-Connecting-IP") ||
-    request.headers.get("X-Forwarded-For")?.split(",")[0]?.trim();
-
-  const response = await fetch(
-    "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        secret,
-        response: token,
-        ...(remoteip ? { remoteip } : {}),
-      }),
-      cache: "no-store",
-    }
-  );
-
-  if (!response.ok) {
-    return false;
-  }
-
-  const result = await response.json();
-
-  return result.success === true;
-}
-
 export async function POST(request: Request) {
   try {
-    const ip = getClientIp(request);
-
-    if (isRateLimited(ip)) {
-      return NextResponse.json(
-        {
-          error:
-            "تعداد درخواست‌ها زیاد است. لطفاً چند دقیقه بعد دوباره تلاش کنید.",
-        },
-        { status: 429 }
-      );
-    }
-
     const body = await request.json();
 
-    const name = String(body.name || "").trim();
-    const email = String(body.email || "").trim();
-    const message = String(body.message || "").trim();
-    const turnstileToken = String(body.turnstileToken || "").trim();
-    const website = String(body.website || "").trim();
+    const name =
+      typeof body.name === "string" ? body.name.trim() : "";
 
-    // Honeypot: real users should never fill this hidden field.
-    if (website) {
-      return NextResponse.json({ ok: true });
-    }
+    const email =
+      typeof body.email === "string" ? body.email.trim() : "";
+
+    const phone =
+      typeof body.phone === "string" ? body.phone.trim() : "";
+
+    const message =
+      typeof body.message === "string" ? body.message.trim() : "";
+
+    const website =
+      typeof body.website === "string" ? body.website.trim() : "";
+
+    const turnstileToken =
+      typeof body.turnstileToken === "string"
+        ? body.turnstileToken
+        : "";
 
     if (!name || !email || !message) {
       return NextResponse.json(
-        { error: "لطفاً همه فیلدها را تکمیل کنید." },
+        {
+          error: "لطفاً نام، ایمیل و پیام را وارد کنید.",
+        },
         { status: 400 }
       );
     }
 
-    if (name.length > 100) {
+    if (website) {
       return NextResponse.json(
-        { error: "نام واردشده بیش از حد طولانی است." },
-        { status: 400 }
-      );
-    }
-
-    if (email.length > 254) {
-      return NextResponse.json(
-        { error: "ایمیل واردشده معتبر نیست." },
-        { status: 400 }
-      );
-    }
-
-    if (message.length > 5000) {
-      return NextResponse.json(
-        { error: "پیام بیش از حد طولانی است." },
-        { status: 400 }
-      );
-    }
-
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!emailPattern.test(email)) {
-      return NextResponse.json(
-        { error: "لطفاً یک آدرس ایمیل معتبر وارد کنید." },
+        {
+          error: "ارسال پیام انجام نشد.",
+        },
         { status: 400 }
       );
     }
 
     if (!turnstileToken) {
       return NextResponse.json(
-        { error: "لطفاً تأیید امنیتی را انجام دهید." },
-        { status: 400 }
-      );
-    }
-
-    const turnstileValid = await verifyTurnstile(turnstileToken, request);
-
-    if (!turnstileValid) {
-      return NextResponse.json(
         {
-          error:
-            "تأیید امنیتی ناموفق بود. لطفاً دوباره تلاش کنید.",
+          error: "لطفاً تأیید امنیتی را کامل کنید.",
         },
         { status: 400 }
       );
     }
 
+    const turnstileSecret = process.env.TURNSTILE_SECRET_KEY;
+
+    if (!turnstileSecret) {
+      console.error("TURNSTILE_SECRET_KEY is not configured.");
+
+      return NextResponse.json(
+        {
+          error: "تنظیمات امنیتی سرور کامل نیست.",
+        },
+        { status: 500 }
+      );
+    }
+
+    const turnstileResponse = await fetch(
+      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          secret: turnstileSecret,
+          response: turnstileToken,
+        }),
+      }
+    );
+
+    const turnstileResult = await turnstileResponse.json();
+
+    if (!turnstileResult.success) {
+      return NextResponse.json(
+        {
+          error: "تأیید امنیتی ناموفق بود. لطفاً دوباره تلاش کنید.",
+        },
+        { status: 400 }
+      );
+    }
+
+    if (!process.env.RESEND_API_KEY) {
+      console.error("RESEND_API_KEY is not configured.");
+
+      return NextResponse.json(
+        {
+          error: "تنظیمات ارسال ایمیل کامل نیست.",
+        },
+        { status: 500 }
+      );
+    }
+
     const { error } = await resend.emails.send({
-      from: "Website Contact <website@fayyazzadeh.ir>",
+      from: "Website Contact <onboarding@resend.dev>",
       to: ["ramin@fayyazzadeh.ir"],
       replyTo: email,
-      subject: `پیام جدید از سایت - ${name}`,
-      text: `نام: ${name}
+      subject: `پیام جدید از ${name}`,
+      text: `
+پیام جدید از سایت fayyazzadeh.ir
 
-ایمیل: ${email}
+نام:
+${name}
+
+ایمیل:
+${email}
+
+شماره تماس:
+${phone || "وارد نشده"}
 
 پیام:
-${message}`,
+${message}
+      `.trim(),
     });
 
     if (error) {
       console.error("Resend error:", error);
 
       return NextResponse.json(
-        { error: "ارسال پیام انجام نشد. لطفاً دوباره تلاش کنید." },
+        {
+          error: "ارسال ایمیل انجام نشد. لطفاً دوباره تلاش کنید.",
+        },
         { status: 500 }
       );
     }
 
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({
+      success: true,
+      message: "پیام با موفقیت ارسال شد.",
+    });
   } catch (error) {
-    console.error("Contact API error:", error);
+    console.error("Contact form error:", error);
 
     return NextResponse.json(
-      { error: "خطایی در ارسال پیام رخ داد." },
+      {
+        error: "خطایی در پردازش درخواست رخ داد.",
+      },
       { status: 500 }
     );
   }
