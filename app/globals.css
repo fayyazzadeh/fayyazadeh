@@ -104,3 +104,31 @@ footer { padding: 30px 0 45px; border-top: 1px solid var(--line); color: var(--m
 @media (max-width: 900px) { .nav-links { display: none; } .hero-grid, .about-grid, .contact-grid { grid-template-columns: 1fr; } .hero { padding-top: 115px; } .profile-card { order: -1; width: min(300px, 100%); } .skill-groups { grid-template-columns: 1fr; } .courses { grid-template-columns: repeat(2, 1fr); } .section-head { align-items: start; flex-direction: column; } }
 @media (max-width: 620px) { .container { width: min(100% - 26px, 1120px); } section { padding: 78px 0; } .hero h1 { font-size: clamp(2.3rem, 13vw, 3.8rem); } .about-copy, .skill-group, .contact-form { padding: 22px; } .stats, .courses { grid-template-columns: 1fr; } .stat { min-height: 115px; } summary { grid-template-columns: 1fr; } .job-date { white-space: normal; } .footer-inner { flex-direction: column; } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; } }
+/* Experience RTL fix */
+.timeline {
+  direction: rtl;
+}
+
+.experience-item details {
+  direction: rtl;
+  text-align: right;
+}
+
+.experience-item summary {
+  direction: rtl;
+  text-align: right;
+}
+
+.job-date {
+  direction: rtl;
+  text-align: right;
+  white-space: nowrap;
+  unicode-bidi: isolate;
+}
+
+.job-company,
+.job-title,
+.job-body {
+  direction: rtl;
+  text-align: right;
+}
