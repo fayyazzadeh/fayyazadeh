@@ -1,7 +1,3 @@
-"use client";
-
-import Script from "next/script";
-import { FormEvent, useState } from "react";
 
 const experiences = [
   [
@@ -139,60 +135,8 @@ function Arrow() {
 }
 
 export default function Home() {
-  const [sending, setSending] = useState(false);
-  const [status, setStatus] = useState("");
-
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    if (sending) return;
-
-    setSending(true);
-    setStatus("");
-
-    const form = event.currentTarget;
-    const data = new FormData(form);
-
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: data.get("name"),
-          email: data.get("email"),
-          phone: data.get("phone"),
-          message: data.get("message"),
-          website: data.get("website"),
-          turnstileToken: data.get("cf-turnstile-response"),
-        }),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        setStatus(result.error || "ارسال پیام انجام نشد.");
-        return;
-      }
-
-      form.reset();
-      setStatus("پیام شما با موفقیت ارسال شد.");
-    } catch {
-      setStatus("ارتباط با سرور برقرار نشد. لطفاً دوباره تلاش کنید.");
-    } finally {
-      setSending(false);
-    }
-  }
-
   return (
-    <>
-      <Script
-        src="https://challenges.cloudflare.com/turnstile/v0/api.js"
-        strategy="afterInteractive"
-      />
-
-      <main className="page-shell">
+    <main className="page-shell">
         <header className="topbar">
           <nav className="container nav" aria-label="ناوبری اصلی">
             <a className="brand" href="#top">
@@ -523,88 +467,7 @@ export default function Home() {
                 </a>
               </div>
 
-              <form className="panel contact-form" onSubmit={handleSubmit}>
-                <div className="field">
-                  <label htmlFor="name">نام</label>
 
-                  <input
-                    id="name"
-                    name="name"
-                    required
-                    maxLength={100}
-                    placeholder="نام شما"
-                  />
-                </div>
-
-                <div className="field">
-                  <label htmlFor="email">ایمیل</label>
-
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    required
-                    maxLength={254}
-                    placeholder="name@example.com"
-                  />
-                </div>
-
-                <div className="field">
-                  <label htmlFor="phone">شماره تماس (اختیاری)</label>
-
-                  <input
-                    id="phone"
-                    name="phone"
-                    type="tel"
-                    maxLength={20}
-                    placeholder="مثلاً 09121234567"
-                    inputMode="tel"
-                  />
-                </div>
-
-                <div className="field">
-                  <label htmlFor="message">پیام</label>
-
-                  <textarea
-                    id="message"
-                    name="message"
-                    required
-                    maxLength={5000}
-                    placeholder="پیام شما..."
-                  />
-                </div>
-
-                <div
-                  className="cf-turnstile"
-                  data-sitekey="0x4AAAAAAE7pG48PU_SVKf-s"
-                  data-theme="dark"
-                  data-size="flexible"
-                  data-language="auto"
-                />
-
-                <input
-                  type="text"
-                  name="website"
-                  tabIndex={-1}
-                  autoComplete="off"
-                  aria-hidden="true"
-                  className="honeypot"
-                />
-
-                <button
-                  className="btn btn-primary"
-                  type="submit"
-                  disabled={sending}
-                >
-                  {sending ? "در حال ارسال..." : "ارسال پیام"} <Arrow />
-                </button>
-
-                {status && (
-                  <p className="form-status" role="status">
-                    {status}
-                  </p>
-                )}
-              </form>
             </div>
           </div>
         </section>
@@ -620,6 +483,5 @@ export default function Home() {
           </div>
         </footer>
       </main>
-    </>
   );
 }
