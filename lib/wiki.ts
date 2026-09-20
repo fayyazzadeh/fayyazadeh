@@ -334,15 +334,15 @@ function normalizeText(value: string) {
     .replace(/[يى]/g, "ی")
     .replace(/ك/g, "ک")
     .replace(/[‌]/g, " ")
-    .replace(/[\\u064B-\\u065F]/g, "")
+    .replace(/[\u064B-\u065F]/g, "")
     .replace(/[.,!?;:()[\\]{}"'«»؟،؛]/g, " ")
-    .replace(/\\s+/g, " ")
+    .replace(/\s+/g, " ")
     .trim();
 }
 
 function tokenize(value: string) {
   return normalizeText(value)
-    .split(/\\s+/)
+    .split(/\s+/)
     .filter((term) => term.length > 1 && !STOP_WORDS.has(term));
 }
 
