@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from "react";
+
 
 const experiences = [
   [
@@ -135,6 +139,10 @@ function Arrow() {
 }
 
 export default function Home() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const closeMobileMenu = () => setMobileMenuOpen(false);
+
   return (
     <main className="page-shell">
         <header className="topbar">
@@ -152,9 +160,34 @@ export default function Home() {
               <a href="#contact">تماس</a>
             </div>
 
-            <a className="btn btn-secondary" href="#contact">
+            <a className="btn btn-secondary nav-cta" href="#contact">
               در تماس باشیم
             </a>
+
+            <button
+              type="button"
+              className="mobile-menu-button"
+              aria-label={mobileMenuOpen ? "بستن منو" : "باز کردن منو"}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-navigation"
+              onClick={() => setMobileMenuOpen((open) => !open)}
+            >
+              <span />
+              <span />
+              <span />
+            </button>
+
+            <div
+              id="mobile-navigation"
+              className={mobileMenuOpen ? "mobile-menu open" : "mobile-menu"}
+            >
+              <a href="#about" onClick={closeMobileMenu}>درباره من</a>
+              <a href="/wiki" onClick={closeMobileMenu}>ویکی</a>
+              <a href="#skills" onClick={closeMobileMenu}>مهارت‌ها</a>
+              <a href="#experience" onClick={closeMobileMenu}>سوابق</a>
+              <a href="#courses" onClick={closeMobileMenu}>دوره‌ها</a>
+              <a href="#contact" onClick={closeMobileMenu}>تماس</a>
+            </div>
           </nav>
         </header>
 
