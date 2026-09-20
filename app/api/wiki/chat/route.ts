@@ -2,8 +2,6 @@ import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { searchWiki } from "@/lib/wiki";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 function createTicketId() {
   const timestamp = Date.now().toString(36).toUpperCase();
   const random = Math.random().toString(36).slice(2, 6).toUpperCase();
@@ -37,9 +35,11 @@ export async function POST(request: Request) {
     }
 
     const ticketId = createTicketId();
+    const resendApiKey = process.env.RESEND_API_KEY;
 
-    if (process.env.RESEND_API_KEY) {
-      await resend.emails.send({
+    if (resendApiKey) {
+      const resend = new Resend(resendApiKey);
+      const { error } = await resend.emails.send({
         from: "Wiki Support <wiki@fayyazzadeh.ir>",
         to: ["ramin@fayyazzadeh.ir"],
         subject: `[${ticketId}] درخواست پشتیبانی جدید از دانش‌نامه`,
@@ -57,6 +57,20 @@ export async function POST(request: Request) {
           `زمان ثبت: ${new Date().toISOString()}`,
         ].join("\n"),
       });
+
+      if (error) {
+        console.error("Wiki support email error:", error);
+        return NextResponse.json(
+          { answer: "ثبت درخواست انجام نشد. لطفاً دوباره تلاش کنید." },
+          { status: 500 },
+        );
+      }
+    } else {
+      console.error("RESEND_API_KEY is not configured.");
+      return NextResponse.json(
+        { answer: "تنظیمات ارسال ایمیل کامل نیست. لطفاً بعداً دوباره تلاش کنید." },
+        { status: 500 },
+      );
     }
 
     return NextResponse.json({
