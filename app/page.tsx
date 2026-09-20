@@ -145,7 +145,7 @@ export default function Home() {
 
             <div className="nav-links">
               <a href="#about">درباره من</a>
-              <a href="/wiki">دانش‌نامه</a>
+              <a href="/wiki">ویکی</a>
               <a href="#skills">مهارت‌ها</a>
               <a href="#experience">سوابق</a>
               <a href="#courses">دوره‌ها</a>
