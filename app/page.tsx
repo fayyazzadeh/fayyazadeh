@@ -153,11 +153,11 @@ export default function Home() {
 
             <div className="nav-links">
               <a href="#about">درباره من</a>
-              <a href="/wiki">ویکی</a>
               <a href="#skills">مهارت‌ها</a>
               <a href="#experience">سوابق</a>
               <a href="#courses">دوره‌ها</a>
               <a href="#contact">تماس</a>
+              <a href="/wiki">ویکی</a>
             </div>
 
             <a className="btn btn-secondary nav-cta" href="#contact">
@@ -182,11 +182,11 @@ export default function Home() {
               className={mobileMenuOpen ? "mobile-menu open" : "mobile-menu"}
             >
               <a href="#about" onClick={closeMobileMenu}>درباره من</a>
-              <a href="/wiki" onClick={closeMobileMenu}>ویکی</a>
               <a href="#skills" onClick={closeMobileMenu}>مهارت‌ها</a>
               <a href="#experience" onClick={closeMobileMenu}>سوابق</a>
               <a href="#courses" onClick={closeMobileMenu}>دوره‌ها</a>
               <a href="#contact" onClick={closeMobileMenu}>تماس</a>
+              <a href="/wiki" onClick={closeMobileMenu}>ویکی</a>
             </div>
           </nav>
         </header>
