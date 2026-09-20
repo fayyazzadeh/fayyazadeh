@@ -22,14 +22,26 @@ export const wikiArticles: WikiArticle[] = [
   },
   {
     slug: "dns-troubleshooting",
-    title: "عیب‌یابی DNS",
+    title: "عیب‌یابی DNS و خطاهای DNS",
     category: "Troubleshooting",
-    excerpt: "مراحل بررسی خطاهای DNS در شبکه‌های سازمانی.",
-    tags: ["dns", "network", "troubleshooting"],
+    excerpt: "مراحل بررسی خطاهای DNS، DNS Failure و مشکل Resolve نشدن نام دامنه.",
+    tags: [
+      "dns",
+      "dns fail",
+      "dns failure",
+      "dns error",
+      "dns problem",
+      "dns not working",
+      "resolve",
+      "name resolution",
+      "troubleshooting"
+    ],
     content: [
-      "ابتدا مشخص کنید مشکل برای همه کاربران است یا فقط یک سیستم.",
-      "Resolve شدن نام دامنه را از کلاینت و از سرور DNS بررسی کنید.",
-      "اگر IP مقصد قابل دسترسی است اما نام دامنه Resolve نمی‌شود، DNS را از مسیر شبکه جداگانه بررسی کنید."
+      "ابتدا مشخص کنید مشکل DNS برای همه کاربران است یا فقط یک سیستم.",
+      "با ابزارهایی مانند nslookup یا dig بررسی کنید که نام دامنه Resolve می‌شود یا خیر.",
+      "اگر IP مقصد قابل دسترسی است اما نام دامنه Resolve نمی‌شود، مشکل از DNS یا مسیر دسترسی به DNS است.",
+      "آدرس DNS کلاینت، دسترسی به سرور DNS و پاسخ‌گویی پورت 53 را بررسی کنید.",
+      "در صورت نیاز، DNS جایگزین را آزمایش کنید و نتیجه nslookup را ثبت کنید."
     ]
   },
   {
@@ -71,15 +83,27 @@ export const wikiArticles: WikiArticle[] = [
 ];
 
 export function searchWiki(query: string) {
-  const terms = query.toLowerCase().trim().split(/\\s+/).filter(Boolean);
+  const terms = query.toLowerCase().trim().split(/\s+/).filter(Boolean);
   if (!terms.length) return wikiArticles;
 
   return wikiArticles
     .map((article) => {
-      const haystack = [article.title, article.category, article.excerpt, ...article.tags, ...article.content]
-        .join(" ")
-        .toLowerCase();
-      const score = terms.reduce((total, term) => total + (haystack.includes(term) ? 1 : 0), 0);
+      const haystack = [
+        article.title,
+        article.category,
+        article.excerpt,
+        ...article.tags,
+        ...article.content
+      ].join(" ").toLowerCase();
+
+      const score = terms.reduce((total, term) => {
+        if (haystack.includes(term)) return total + 1;
+        if (term === "fail" && article.tags.includes("dns fail")) return total + 1;
+        if (term === "failure" && article.tags.includes("dns failure")) return total + 1;
+        if (term === "error" && article.tags.includes("dns error")) return total + 1;
+        return total;
+      }, 0);
+
       return { article, score };
     })
     .filter(({ score }) => score > 0)
