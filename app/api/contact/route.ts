@@ -51,7 +51,6 @@ export async function POST(request: Request) {
     const { error } = await resend.emails.send({
       from: "Website Contact <website@fayyazzadeh.ir>",
       to: ["ramin@fayyazzadeh.ir"],
-      replyTo: email,
       subject: `پیام جدید از ${name}`,
       text: [
         "پیام جدید از سایت fayyazzadeh.ir",
