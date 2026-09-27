@@ -16,6 +16,22 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "لطفاً نام، ایمیل و پیام را وارد کنید." }, { status: 400 });
     }
 
+    if (name.length > 30) {
+      return NextResponse.json({ error: "نام و نام خانوادگی نمی‌تواند بیشتر از ۳۰ کاراکتر باشد." }, { status: 400 });
+    }
+
+    if (email.length > 30) {
+      return NextResponse.json({ error: "ایمیل نمی‌تواند بیشتر از ۳۰ کاراکتر باشد." }, { status: 400 });
+    }
+
+    if (phone.length > 14) {
+      return NextResponse.json({ error: "شماره تماس نمی‌تواند بیشتر از ۱۴ کاراکتر باشد." }, { status: 400 });
+    }
+
+    if (message.length > 1000) {
+      return NextResponse.json({ error: "متن پیام نمی‌تواند بیشتر از ۱۰۰۰ کاراکتر باشد." }, { status: 400 });
+    }
+
     if (website) {
       return NextResponse.json({ error: "ارسال پیام انجام نشد." }, { status: 400 });
     }
