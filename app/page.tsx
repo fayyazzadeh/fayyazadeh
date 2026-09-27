@@ -143,6 +143,7 @@ export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [sending, setSending] = useState(false);
   const [status, setStatus] = useState("");
+  const [messageLength, setMessageLength] = useState(0);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -546,23 +547,33 @@ export default function Home() {
 
               <form className="panel contact-form" onSubmit={handleSubmit}>
                 <div className="field">
-                  <label htmlFor="name">نام</label>
-                  <input id="name" name="name" required maxLength={100} placeholder="نام شما" />
+                  <label htmlFor="name">نام و نام خانوادگی</label>
+                  <input id="name" name="name" required maxLength={30} placeholder="نام و نام خانوادگی شما" />
                 </div>
 
                 <div className="field">
                   <label htmlFor="email">ایمیل</label>
-                  <input id="email" name="email" type="email" required maxLength={254} placeholder="name@example.com" />
+                  <input id="email" name="email" type="email" required maxLength={30} placeholder="name@example.com" />
                 </div>
 
                 <div className="field">
                   <label htmlFor="phone">شماره تماس (اختیاری)</label>
-                  <input id="phone" name="phone" type="tel" maxLength={20} placeholder="مثلاً 09121234567" inputMode="tel" />
+                  <input id="phone" name="phone" type="tel" maxLength={14} placeholder="مثلاً 09121234567" inputMode="tel" />
                 </div>
 
                 <div className="field">
                   <label htmlFor="message">پیام</label>
-                  <textarea id="message" name="message" required maxLength={5000} placeholder="پیام شما..." />
+                  <textarea
+                    id="message"
+                    name="message"
+                    required
+                    maxLength={1000}
+                    placeholder="پیام شما..."
+                    onChange={(event) => setMessageLength(event.target.value.length)}
+                  />
+                  <div className="character-count" aria-live="polite">
+                    {messageLength} / 1000
+                  </div>
                 </div>
 
                 <div className="cf-turnstile" data-sitekey="0x4AAAAAAE7pG48PU_SVKf-s" data-theme="dark" data-size="flexible" data-language="auto" />
