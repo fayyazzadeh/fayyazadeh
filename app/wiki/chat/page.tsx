@@ -145,7 +145,7 @@ export default function WikiChatPage() {
               type="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              placeholder="ایمیل"
+              placeholder="ایمیل (مثال: name@example.com)"
               maxLength={254}
             />
             <input
