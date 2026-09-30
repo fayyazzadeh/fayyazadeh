@@ -25,30 +25,6 @@ export default function WikiChatPage() {
 
     setInput("");
     setMessages((current) => [...current, { role: "user", text }]);
-    const trimmedName = name.trim();
-    const trimmedEmail = email.trim();
-    const trimmedPhone = phone.trim();
-
-    if (trimmedName.length < 2 || trimmedName.length > 80) {
-      setMessages((current) => [...current, { role: "assistant", text: "نام و نام خانوادگی باید بین ۲ تا ۸۰ کاراکتر باشد." }]);
-      return;
-    }
-
-    if (trimmedEmail && (trimmedEmail.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail))) {
-      setMessages((current) => [...current, { role: "assistant", text: "لطفاً یک آدرس ایمیل معتبر وارد کنید." }]);
-      return;
-    }
-
-    if (trimmedPhone && (trimmedPhone.length > 20 || !/^[+()\d\s-]+$/.test(trimmedPhone))) {
-      setMessages((current) => [...current, { role: "assistant", text: "لطفاً شماره تماس را به شکل معتبر وارد کنید." }]);
-      return;
-    }
-
-    if (!trimmedEmail && !trimmedPhone) {
-      setMessages((current) => [...current, { role: "assistant", text: "لطفاً حداقل ایمیل یا شماره تماس خود را وارد کنید." }]);
-      return;
-    }
-
     setBusy(true);
 
     try {
@@ -75,6 +51,30 @@ export default function WikiChatPage() {
   async function submitContact(event: FormEvent) {
     event.preventDefault();
     if (!pendingQuestion || busy) return;
+
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim();
+    const trimmedPhone = phone.trim();
+
+    if (trimmedName.length < 2 || trimmedName.length > 80) {
+      setMessages((current) => [...current, { role: "assistant", text: "نام و نام خانوادگی باید بین ۲ تا ۸۰ کاراکتر باشد." }]);
+      return;
+    }
+
+    if (trimmedEmail && (trimmedEmail.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail))) {
+      setMessages((current) => [...current, { role: "assistant", text: "لطفاً یک آدرس ایمیل معتبر وارد کنید." }]);
+      return;
+    }
+
+    if (trimmedPhone && (trimmedPhone.length > 20 || !/^[+()\d\s-]+$/.test(trimmedPhone))) {
+      setMessages((current) => [...current, { role: "assistant", text: "لطفاً شماره تماس را به شکل معتبر وارد کنید." }]);
+      return;
+    }
+
+    if (!trimmedEmail && !trimmedPhone) {
+      setMessages((current) => [...current, { role: "assistant", text: "لطفاً حداقل ایمیل یا شماره تماس خود را وارد کنید." }]);
+      return;
+    }
 
     setBusy(true);
 
