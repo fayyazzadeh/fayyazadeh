@@ -26,6 +26,18 @@ export async function POST(request: Request) {
       return NextResponse.json({ answer: "لطفاً نام خود را وارد کنید." }, { status: 400 });
     }
 
+    if (name.length < 2 || name.length > 80) {
+      return NextResponse.json({ answer: "نام و نام خانوادگی باید بین ۲ تا ۸۰ کاراکتر باشد." }, { status: 400 });
+    }
+
+    if (email.length > 254) {
+      return NextResponse.json({ answer: "آدرس ایمیل بیش از حد طولانی است." }, { status: 400 });
+    }
+
+    if (phone.length > 20 || (phone && !/^[+()\d\s-]+$/.test(phone))) {
+      return NextResponse.json({ answer: "شماره تماس واردشده معتبر نیست." }, { status: 400 });
+    }
+
     if (!email && !phone) {
       return NextResponse.json({ answer: "لطفاً حداقل ایمیل یا شماره تماس خود را وارد کنید." }, { status: 400 });
     }
