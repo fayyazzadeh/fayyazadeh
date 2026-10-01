@@ -17,6 +17,7 @@ export default function WikiChatPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [confirmingContact, setConfirmingContact] = useState(false);
 
   async function send(event: FormEvent) {
     event.preventDefault();
@@ -25,6 +26,12 @@ export default function WikiChatPage() {
 
     setInput("");
     setMessages((current) => [...current, { role: "user", text }]);
+    setConfirmingContact(true);
+  }
+
+  async function confirmContact() {
+    if (!pendingQuestion || busy) return;
+
     setBusy(true);
 
     try {
@@ -99,6 +106,7 @@ export default function WikiChatPage() {
 
       setMessages((current) => [...current, { role: "assistant", text: data.answer }]);
       setContactOpen(false);
+      setConfirmingContact(false);
       setPendingQuestion("");
       setName("");
       setEmail("");
@@ -128,36 +136,33 @@ export default function WikiChatPage() {
           ))}
         </div>
 
-        {contactOpen && (
+        {contactOpen && !confirmingContact && (
           <form className="contact-ticket-form" onSubmit={submitContact}>
             <div className="wiki-kicker">HUMAN SUPPORT</div>
             <h2>اطلاعات تماس برای پیگیری</h2>
             <p>برای اینکه بتوانم درخواست شما را برای رامین ارسال کنم، نام و حداقل یکی از راه‌های تماس را وارد کنید.</p>
-
-            <input
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-              placeholder="نام و نام خانوادگی *"
-              maxLength={80}
-              required
-            />
-            <input
-              type="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              placeholder="ایمیل (مثال: name@example.com)"
-              maxLength={254}
-            />
-            <input
-              type="tel"
-              value={phone}
-              onChange={(event) => setPhone(event.target.value)}
-              placeholder="شماره تماس"
-              maxLength={20}
-              inputMode="tel"
-            />
-            <button disabled={busy}>{busy ? "در حال ثبت..." : "ثبت درخواست پشتیبانی"}</button>
+            <input value={name} onChange={(event) => setName(event.target.value)} placeholder="نام و نام خانوادگی *" maxLength={80} required />
+            <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="ایمیل (مثال: name@example.com)" maxLength={254} />
+            <input type="tel" value={phone} onChange={(event) => setPhone(event.target.value)} placeholder="شماره تماس" maxLength={20} inputMode="tel" />
+            <button disabled={busy}>بررسی اطلاعات</button>
           </form>
+        )}
+
+        {contactOpen && confirmingContact && (
+          <div className="contact-ticket-form">
+            <div className="wiki-kicker">CONFIRM DETAILS</div>
+            <h2>لطفاً اطلاعات خود را تأیید کنید</h2>
+            <p>اطلاعات زیر را بررسی کنید. در صورت صحیح بودن، درخواست ارسال می‌شود.</p>
+            <div className="contact-confirmation">
+              <div><strong>نام:</strong> {name.trim()}</div>
+              <div><strong>ایمیل:</strong> {email.trim() || "ثبت نشده"}</div>
+              <div><strong>شماره تماس:</strong> {phone.trim() || "ثبت نشده"}</div>
+            </div>
+            <div className="contact-confirmation-actions">
+              <button type="button" onClick={() => setConfirmingContact(false)} disabled={busy}>ویرایش اطلاعات</button>
+              <button type="button" onClick={confirmContact} disabled={busy}>{busy ? "در حال ارسال..." : "تأیید و ارسال درخواست"}</button>
+            </div>
+          </div>
         )}
 
         <form className="chat-form" onSubmit={send}>
