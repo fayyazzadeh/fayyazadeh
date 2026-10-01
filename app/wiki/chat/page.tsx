@@ -9,47 +9,82 @@ type Message = { role: "user" | "assistant"; text: string };
 export default function WikiChatPage() {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Message[]>([
-    { role: "assistant", text: "سلام! سؤال فنی‌ات را بپرس. ابتدا دانش‌نامه را بررسی می‌کنم؛ اگر پاسخ کافی پیدا نشود، امکان ارجاع به رامین وجود دارد." }
+    {
+      role: "assistant",
+      text: "سلام! سؤال فنی‌ات را بپرس. ابتدا دانش‌نامه را بررسی می‌کنم؛ اگر پاسخ کافی پیدا نشود، امکان ارجاع به رامین وجود دارد.",
+    },
   ]);
+
   const [busy, setBusy] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
   const [pendingQuestion, setPendingQuestion] = useState("");
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+
   const [confirmingContact, setConfirmingContact] = useState(false);
 
   async function send(event: FormEvent) {
     event.preventDefault();
+
     const text = input.trim();
+
     if (!text || busy) return;
 
     setInput("");
-    setMessages((current) => [...current, { role: "user", text }]);
-    setConfirmingContact(true);
-  }
-
-  async function confirmContact() {
-    if (!pendingQuestion || busy) return;
+    setMessages((current) => [
+      ...current,
+      { role: "user", text },
+    ]);
 
     setBusy(true);
 
     try {
       const response = await fetch("/api/wiki/chat", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text })
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: text,
+        }),
       });
+
       const data = await response.json();
 
-      setMessages((current) => [...current, { role: "assistant", text: data.answer || "پاسخی پیدا نشد." }]);
+      if (!response.ok) {
+        setMessages((current) => [
+          ...current,
+          {
+            role: "assistant",
+            text: data.answer || "خطایی در پردازش درخواست رخ داد.",
+          },
+        ]);
+        return;
+      }
+
+      setMessages((current) => [
+        ...current,
+        {
+          role: "assistant",
+          text: data.answer || "پاسخی پیدا نشد.",
+        },
+      ]);
 
       if (data.needsContact) {
         setPendingQuestion(text);
         setContactOpen(true);
+        setConfirmingContact(false);
       }
     } catch {
-      setMessages((current) => [...current, { role: "assistant", text: "ارتباط با دستیار برقرار نشد. لطفاً دوباره تلاش کنید." }]);
+      setMessages((current) => [
+        ...current,
+        {
+          role: "assistant",
+          text: "ارتباط با دستیار برقرار نشد. لطفاً دوباره تلاش کنید.",
+        },
+      ]);
     } finally {
       setBusy(false);
     }
@@ -57,6 +92,7 @@ export default function WikiChatPage() {
 
   async function submitContact(event: FormEvent) {
     event.preventDefault();
+
     if (!pendingQuestion || busy) return;
 
     const trimmedName = name.trim();
@@ -64,55 +100,127 @@ export default function WikiChatPage() {
     const trimmedPhone = phone.trim();
 
     if (trimmedName.length < 2 || trimmedName.length > 80) {
-      setMessages((current) => [...current, { role: "assistant", text: "نام و نام خانوادگی باید بین ۲ تا ۸۰ کاراکتر باشد." }]);
+      setMessages((current) => [
+        ...current,
+        {
+          role: "assistant",
+          text: "نام و نام خانوادگی باید بین ۲ تا ۸۰ کاراکتر باشد.",
+        },
+      ]);
       return;
     }
 
-    if (trimmedEmail && (trimmedEmail.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail))) {
-      setMessages((current) => [...current, { role: "assistant", text: "لطفاً یک آدرس ایمیل معتبر وارد کنید." }]);
+    if (
+      trimmedEmail &&
+      (
+        trimmedEmail.length > 254 ||
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)
+      )
+    ) {
+      setMessages((current) => [
+        ...current,
+        {
+          role: "assistant",
+          text: "لطفاً یک آدرس ایمیل معتبر وارد کنید.",
+        },
+      ]);
       return;
     }
 
-    if (trimmedPhone && (trimmedPhone.length > 20 || !/^[+()\d\s-]+$/.test(trimmedPhone))) {
-      setMessages((current) => [...current, { role: "assistant", text: "لطفاً شماره تماس را به شکل معتبر وارد کنید." }]);
+    if (
+      trimmedPhone &&
+      (
+        trimmedPhone.length > 20 ||
+        !/^[+()\d\s-]+$/.test(trimmedPhone)
+      )
+    ) {
+      setMessages((current) => [
+        ...current,
+        {
+          role: "assistant",
+          text: "لطفاً شماره تماس را به شکل معتبر وارد کنید.",
+        },
+      ]);
       return;
     }
 
     if (!trimmedEmail && !trimmedPhone) {
-      setMessages((current) => [...current, { role: "assistant", text: "لطفاً حداقل ایمیل یا شماره تماس خود را وارد کنید." }]);
+      setMessages((current) => [
+        ...current,
+        {
+          role: "assistant",
+          text: "لطفاً حداقل ایمیل یا شماره تماس خود را وارد کنید.",
+        },
+      ]);
       return;
     }
+
+    // فقط نمایش مرحله تأیید
+    setConfirmingContact(true);
+  }
+
+  async function confirmContact() {
+    if (!pendingQuestion || busy) return;
+
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim();
+    const trimmedPhone = phone.trim();
 
     setBusy(true);
 
     try {
       const response = await fetch("/api/wiki/chat", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           message: pendingQuestion,
           submitTicket: true,
           name: trimmedName,
           email: trimmedEmail,
-          phone: trimmedPhone
-        })
+          phone: trimmedPhone,
+        }),
       });
+
       const data = await response.json();
 
       if (!response.ok) {
-        setMessages((current) => [...current, { role: "assistant", text: data.answer || "ثبت درخواست انجام نشد." }]);
+        setMessages((current) => [
+          ...current,
+          {
+            role: "assistant",
+            text: data.answer || "ثبت درخواست انجام نشد.",
+          },
+        ]);
         return;
       }
 
-      setMessages((current) => [...current, { role: "assistant", text: data.answer }]);
+      setMessages((current) => [
+        ...current,
+        {
+          role: "assistant",
+          text:
+            data.answer ||
+            "درخواست شما با موفقیت ثبت شد.",
+        },
+      ]);
+
       setContactOpen(false);
       setConfirmingContact(false);
       setPendingQuestion("");
+
       setName("");
       setEmail("");
       setPhone("");
     } catch {
-      setMessages((current) => [...current, { role: "assistant", text: "ثبت درخواست انجام نشد. لطفاً دوباره تلاش کنید." }]);
+      setMessages((current) => [
+        ...current,
+        {
+          role: "assistant",
+          text: "ثبت درخواست انجام نشد. لطفاً دوباره تلاش کنید.",
+        },
+      ]);
     } finally {
       setBusy(false);
     }
@@ -127,47 +235,152 @@ export default function WikiChatPage() {
 
       <section className="chat-panel">
         <div className="wiki-kicker">AI SUPPORT</div>
+
         <h1>دستیار دانش‌نامه</h1>
-        <p>پاسخ‌ها از محتوای دانش‌نامه شروع می‌شوند و در صورت نبودن پاسخ کافی، مسیر پشتیبانی انسانی فعال می‌شود.</p>
+
+        <p>
+          پاسخ‌ها از محتوای دانش‌نامه شروع می‌شوند و در صورت نبودن پاسخ کافی،
+          مسیر پشتیبانی انسانی فعال می‌شود.
+        </p>
 
         <div className="messages" aria-live="polite">
           {messages.map((message, index) => (
-            <div className={`message ${message.role}`} key={index}>{message.text}</div>
+            <div
+              className={`message ${message.role}`}
+              key={index}
+            >
+              {message.text}
+            </div>
           ))}
         </div>
 
         {contactOpen && !confirmingContact && (
-          <form className="contact-ticket-form" onSubmit={submitContact}>
-            <div className="wiki-kicker">HUMAN SUPPORT</div>
+          <form
+            className="contact-ticket-form"
+            onSubmit={submitContact}
+          >
+            <div className="wiki-kicker">
+              HUMAN SUPPORT
+            </div>
+
             <h2>اطلاعات تماس برای پیگیری</h2>
-            <p>برای اینکه بتوانم درخواست شما را برای رامین ارسال کنم، نام و حداقل یکی از راه‌های تماس را وارد کنید.</p>
-            <input value={name} onChange={(event) => setName(event.target.value)} placeholder="نام و نام خانوادگی *" maxLength={80} required />
-            <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="ایمیل (مثال: name@example.com)" maxLength={254} />
-            <input type="tel" value={phone} onChange={(event) => setPhone(event.target.value)} placeholder="شماره تماس" maxLength={20} inputMode="tel" />
-            <button disabled={busy}>بررسی اطلاعات</button>
+
+            <p>
+              برای اینکه بتوانم درخواست شما را برای رامین ارسال کنم،
+              نام و حداقل یکی از راه‌های تماس را وارد کنید.
+            </p>
+
+            <input
+              value={name}
+              onChange={(event) =>
+                setName(event.target.value)
+              }
+              placeholder="نام و نام خانوادگی *"
+              maxLength={80}
+              required
+            />
+
+            <input
+              type="email"
+              value={email}
+              onChange={(event) =>
+                setEmail(event.target.value)
+              }
+              placeholder="ایمیل (مثال: name@example.com)"
+              maxLength={254}
+            />
+
+            <input
+              type="tel"
+              value={phone}
+              onChange={(event) =>
+                setPhone(event.target.value)
+              }
+              placeholder="شماره تماس"
+              maxLength={20}
+              inputMode="tel"
+            />
+
+            <button type="submit" disabled={busy}>
+              بررسی اطلاعات
+            </button>
           </form>
         )}
 
         {contactOpen && confirmingContact && (
           <div className="contact-ticket-form">
-            <div className="wiki-kicker">CONFIRM DETAILS</div>
-            <h2>لطفاً اطلاعات خود را تأیید کنید</h2>
-            <p>اطلاعات زیر را بررسی کنید. در صورت صحیح بودن، درخواست ارسال می‌شود.</p>
-            <div className="contact-confirmation">
-              <div><strong>نام:</strong> {name.trim()}</div>
-              <div><strong>ایمیل:</strong> {email.trim() || "ثبت نشده"}</div>
-              <div><strong>شماره تماس:</strong> {phone.trim() || "ثبت نشده"}</div>
+            <div className="wiki-kicker">
+              CONFIRM DETAILS
             </div>
+
+            <h2>
+              لطفاً اطلاعات خود را تأیید کنید
+            </h2>
+
+            <p>
+              اطلاعات زیر را بررسی کنید. در صورت صحیح بودن،
+              درخواست ارسال می‌شود.
+            </p>
+
+            <div className="contact-confirmation">
+              <div>
+                <strong>نام:</strong>{" "}
+                {name.trim()}
+              </div>
+
+              <div>
+                <strong>ایمیل:</strong>{" "}
+                {email.trim() || "ثبت نشده"}
+              </div>
+
+              <div>
+                <strong>شماره تماس:</strong>{" "}
+                {phone.trim() || "ثبت نشده"}
+              </div>
+            </div>
+
             <div className="contact-confirmation-actions">
-              <button type="button" onClick={() => setConfirmingContact(false)} disabled={busy}>ویرایش اطلاعات</button>
-              <button type="button" onClick={confirmContact} disabled={busy}>{busy ? "در حال ارسال..." : "تأیید و ارسال درخواست"}</button>
+              <button
+                type="button"
+                onClick={() =>
+                  setConfirmingContact(false)
+                }
+                disabled={busy}
+              >
+                ویرایش اطلاعات
+              </button>
+
+              <button
+                type="button"
+                onClick={confirmContact}
+                disabled={busy}
+              >
+                {busy
+                  ? "در حال ارسال..."
+                  : "تأیید و ارسال درخواست"}
+              </button>
             </div>
           </div>
         )}
 
-        <form className="chat-form" onSubmit={send}>
-          <input value={input} onChange={(event) => setInput(event.target.value)} placeholder="مشکل یا سؤال فنی را بنویس..." />
-          <button disabled={busy}>{busy ? "در حال بررسی..." : "ارسال"}</button>
+        <form
+          className="chat-form"
+          onSubmit={send}
+        >
+          <input
+            value={input}
+            onChange={(event) =>
+              setInput(event.target.value)
+            }
+            placeholder="مشکل یا سؤال فنی را بنویس..."
+            disabled={busy}
+          />
+
+          <button disabled={busy}>
+            {busy
+              ? "در حال بررسی..."
+              : "ارسال"}
+          </button>
         </form>
       </section>
     </main>
