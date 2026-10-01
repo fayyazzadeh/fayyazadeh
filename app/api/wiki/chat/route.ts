@@ -51,31 +51,61 @@ export async function POST(request: Request) {
 
     if (resendApiKey) {
       const resend = new Resend(resendApiKey);
-      const { error } = await resend.emails.send({
-        from: "Wiki Support <wiki@fayyazzadeh.ir>",
-        to: ["ramin@fayyazzadeh.ir"],
+      const from = "Wiki Chat <wikichat@fayyazzadeh.ir>";
+      const ticketText = [
+        "درخواست جدید از fayyazzadeh.ir/wiki/chat",
+        "",
+        `شماره درخواست: ${ticketId}`,
+        `نام: ${name}`,
+        `ایمیل: ${email || "-"}`,
+        `شماره تماس: ${phone || "-"}`,
+        "",
+        "سؤال / مشکل کاربر:",
+        message,
+        "",
+        `زمان ثبت: ${new Date().toISOString()}`,
+      ].join("\n");
+
+      const adminEmail = await resend.emails.send({
+        from,
+        to: ["wikichat@fayyazzadeh.ir"],
         subject: `[${ticketId}] درخواست پشتیبانی جدید از دانش‌نامه`,
-        text: [
-          "درخواست جدید از fayyazzadeh.ir/wiki/chat",
-          "",
-          `شماره درخواست: ${ticketId}`,
-          `نام: ${name}`,
-          `ایمیل: ${email || "-"}`,
-          `شماره تماس: ${phone || "-"}`,
-          "",
-          "سؤال / مشکل کاربر:",
-          message,
-          "",
-          `زمان ثبت: ${new Date().toISOString()}`,
-        ].join("\n"),
+        text: ticketText,
       });
 
-      if (error) {
-        console.error("Wiki support email error:", error);
+      if (adminEmail.error) {
+        console.error("Wiki support admin email error:", adminEmail.error);
         return NextResponse.json(
           { answer: "ثبت درخواست انجام نشد. لطفاً دوباره تلاش کنید." },
           { status: 500 },
         );
+      }
+
+      if (email) {
+        const userEmail = await resend.emails.send({
+          from,
+          to: [email],
+          subject: `[${ticketId}] تأیید ثبت درخواست دانش‌نامه`,
+          text: [
+            `سلام ${name}`,
+            "",
+            "درخواست شما در دانش‌نامه با موفقیت ثبت شد.",
+            "",
+            `شماره درخواست: ${ticketId}`,
+            "",
+            "سؤال / مشکل ثبت‌شده:",
+            message,
+            "",
+            "تیم پشتیبانی دانش‌نامه درخواست شما را بررسی خواهد کرد.",
+            "",
+            "Wiki Chat",
+            "wikichat@fayyazzadeh.ir",
+          ].join("\n"),
+        });
+
+        if (userEmail.error) {
+          console.error("Wiki support user email error:", userEmail.error);
+        }
       }
     } else {
       console.error("RESEND_API_KEY is not configured.");
