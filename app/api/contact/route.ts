@@ -16,16 +16,16 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "لطفاً نام، ایمیل و پیام را وارد کنید." }, { status: 400 });
     }
 
-    if (name.length > 30) {
-      return NextResponse.json({ error: "نام و نام خانوادگی نمی‌تواند بیشتر از ۳۰ کاراکتر باشد." }, { status: 400 });
+    if (name.length < 2 || name.length > 80) {
+      return NextResponse.json({ error: "نام و نام خانوادگی باید بین ۲ تا ۸۰ کاراکتر باشد." }, { status: 400 });
     }
 
-    if (email.length > 30) {
-      return NextResponse.json({ error: "ایمیل نمی‌تواند بیشتر از ۳۰ کاراکتر باشد." }, { status: 400 });
+    if (email.length > 254 || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)) {
+      return NextResponse.json({ error: "لطفاً یک آدرس ایمیل معتبر وارد کنید." }, { status: 400 });
     }
 
-    if (phone.length > 14) {
-      return NextResponse.json({ error: "شماره تماس نمی‌تواند بیشتر از ۱۴ کاراکتر باشد." }, { status: 400 });
+    if (phone.length > 30 || (phone && !/^[+()\\d\\s-]+$/.test(phone))) {
+      return NextResponse.json({ error: "شماره تماس واردشده معتبر نیست." }, { status: 400 });
     }
 
     if (message.length > 1000) {
@@ -67,6 +67,7 @@ export async function POST(request: Request) {
     const { error } = await resend.emails.send({
       from: "Website Contact <website@fayyazzadeh.ir>",
       to: ["ramin@fayyazzadeh.ir"],
+      replyTo: email,
       subject: `پیام جدید از ${name}`,
       text: [
         "پیام جدید از سایت fayyazzadeh.ir",
