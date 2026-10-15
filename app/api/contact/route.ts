@@ -20,11 +20,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "نام و نام خانوادگی باید بین ۲ تا ۸۰ کاراکتر باشد." }, { status: 400 });
     }
 
-    if (email.length > 254 || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)) {
+    if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return NextResponse.json({ error: "لطفاً یک آدرس ایمیل معتبر وارد کنید." }, { status: 400 });
     }
 
-    if (phone.length > 30 || (phone && !/^[+()\\d\\s-]+$/.test(phone))) {
+    if (phone.length > 30 || (phone && !/^[+()\d\s-]+$/.test(phone))) {
       return NextResponse.json({ error: "شماره تماس واردشده معتبر نیست." }, { status: 400 });
     }
 
