@@ -548,17 +548,17 @@ export default function Home() {
               <form className="panel contact-form" onSubmit={handleSubmit}>
                 <div className="field">
                   <label htmlFor="name">نام و نام خانوادگی</label>
-                  <input id="name" name="name" required maxLength={30} placeholder="نام و نام خانوادگی شما" />
+                  <input id="name" name="name" required maxLength={80} placeholder="نام و نام خانوادگی شما" />
                 </div>
 
                 <div className="field">
                   <label htmlFor="email">ایمیل</label>
-                  <input id="email" name="email" type="email" required maxLength={30} placeholder="name@example.com" />
+                  <input id="email" name="email" type="email" required maxLength={254} placeholder="name@example.com" />
                 </div>
 
                 <div className="field">
                   <label htmlFor="phone">شماره تماس (اختیاری)</label>
-                  <input id="phone" name="phone" type="tel" maxLength={14} placeholder="مثلاً 09121234567" inputMode="tel" />
+                  <input id="phone" name="phone" type="tel" maxLength={30} placeholder="مثلاً 09121234567" inputMode="tel" />
                 </div>
 
                 <div className="field">
