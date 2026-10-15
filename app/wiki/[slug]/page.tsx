@@ -7,6 +7,36 @@ export function generateStaticParams() {
   return wikiArticles.map((article) => ({ slug: article.slug }));
 }
 
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const article = getWikiArticle(slug);
+
+  if (!article) {
+    return {
+      title: "مقاله پیدا نشد | دانش‌نامه فنی",
+      robots: { index: false, follow: true },
+    };
+  }
+
+  const title = `${article.title} | دانش‌نامه فنی`;
+  const description = article.excerpt;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `/wiki/${article.slug}`,
+    },
+    openGraph: {
+      type: "article",
+      url: `https://fayyazzadeh.ir/wiki/${article.slug}`,
+      title,
+      description,
+      locale: "fa_IR",
+    },
+  };
+}
+
 export default async function WikiArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const article = getWikiArticle(slug);
