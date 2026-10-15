@@ -7,12 +7,8 @@ export const metadata: Metadata = {
   description:
     "وب‌سایت شخصی رامین فیاض‌زاده؛ متخصص فناوری اطلاعات، شبکه، زیرساخت و پشتیبانی فنی با بیش از ۱۵ سال تجربه.",
   keywords: ["رامین فیاض‌زاده", "IT", "Network", "Infrastructure", "MikroTik", "VMware", "Linux", "Knowledge Base"],
-  alternates: {
-    canonical: "/",
-  },
   openGraph: {
     type: "website",
-    url: "https://fayyazzadeh.ir/",
     siteName: "رامین فیاض‌زاده",
     title: "رامین فیاض‌زاده | IT Specialist | Network & Infrastructure",
     description:
