@@ -3,6 +3,21 @@
 import Script from "next/script";
 import { FormEvent, useState } from "react";
 
+const volunteerActivities = [
+  { title: "عضو تیم هماهنگی و برگزارکننده جلسات گروه کاربران لینوکس تهران (تهلاگ)", date: "۱۳۹۴ تاکنون · ۲۰۱۵ تاکنون" },
+  { title: "برگزاری کارگاه‌های Install Fest در گروه کاربران لینوکس تهران", date: "۱۳۹۵ تاکنون · ۲۰۱۶ تاکنون" },
+  { title: "عضو تیم اجرایی جشن آزادی نرم‌افزار در دانشگاه شریف", date: "۱۳۹۴ · ۲۰۱۵" },
+  { title: "عضو تیم اجرایی جشن پانصدهزارمین مقاله ویکی‌پدیای فارسی در کتابخانه ملی", date: "۱۳۹۵ · ۲۰۱۶" },
+  { title: "عضو تیم اجرایی هشتمین جشنواره ملی لینوکس و نرم‌افزارهای متن‌باز امیرکبیر", date: "۱۳۹۵ · ۲۰۱۶" },
+  { title: "عضو تیم اجرایی جشن آزادی نرم‌افزار در دانشگاه شریف", date: "۱۳۹۵ · ۲۰۱۶" },
+  { title: "عضو تیم اجرایی نهمین جشنواره ملی لینوکس و نرم‌افزارهای متن‌باز امیرکبیر", date: "۱۳۹۶ · ۲۰۱۷" },
+  { title: "عضو تیم اجرایی چهارمین گردهمایی بزرگ سالانه رایانش ابری در پژوهشکده ارتباطات", date: "۱۳۹۷ · ۲۰۱۸" },
+  { title: "عضو تیم اجرایی جشن آزادی نرم‌افزار در رهنما کالج", date: "۱۳۹۷ · ۲۰۱۸" },
+  { title: "برگزاری کارگاه‌های Install Fest و آشنایی با رزبری‌پای و سخت‌افزار آزاد در دانشگاه صنعتی اصفهان", date: "۱۳۹۷ · ۲۰۱۸" },
+  { title: "عضو تیم اجرایی جشن آزادی نرم‌افزار در باغ کتاب", date: "۱۳۹۸ · ۲۰۱۹" },
+  { title: "برگزاری کارگاه‌های Install Fest در جشن انتشار اوبونتو 19.10 در دانشگاه اراک", date: "۱۳۹۸ · ۲۰۱۹" },
+];
+
 
 const experiences = [
   [
@@ -189,6 +204,11 @@ export default function Home() {
       />
 
       <main className="page-shell">
+        <div className="print-resume-header" dir="rtl">
+          <h1>رامین فیاض‌زاده</h1>
+          <p>متخصص فناوری اطلاعات | شبکه و زیرساخت</p>
+          <p>ramin@fayyazzadeh.ir · fayyazzadeh.ir · github.com/fayyazzadeh</p>
+        </div>
         <header className="topbar">
           <nav className="container nav" aria-label="ناوبری اصلی">
             <a className="brand" href="#top">
@@ -199,6 +219,7 @@ export default function Home() {
               <a href="#about">درباره من</a>
               <a href="#skills">مهارت‌ها</a>
               <a href="#experience">سوابق</a>
+              <a href="#volunteer">فعالیت داوطلبانه</a>
               <a href="#courses">دوره‌ها</a>
               <a href="#contact">تماس</a>
               <a href="/wiki">ویکی</a>
@@ -228,6 +249,7 @@ export default function Home() {
               <a href="#about" onClick={closeMobileMenu}>درباره من</a>
               <a href="#skills" onClick={closeMobileMenu}>مهارت‌ها</a>
               <a href="#experience" onClick={closeMobileMenu}>سوابق</a>
+              <a href="#volunteer" onClick={closeMobileMenu}>فعالیت داوطلبانه</a>
               <a href="#courses" onClick={closeMobileMenu}>دوره‌ها</a>
               <a href="#contact" onClick={closeMobileMenu}>تماس</a>
               <a href="/wiki" onClick={closeMobileMenu}>ویکی</a>
@@ -270,6 +292,9 @@ export default function Home() {
                 <a className="btn btn-secondary" href="#experience">
                   سوابق کاری <Arrow />
                 </a>
+                <button className="btn btn-secondary resume-download" type="button" onClick={() => window.print()}>
+                  دانلود رزومه PDF <Arrow />
+                </button>
               </div>
             </div>
 
@@ -443,6 +468,28 @@ export default function Home() {
                   </div>
                 )
               )}
+            </div>
+          </div>
+        </section>
+
+        <section id="volunteer">
+          <div className="container">
+            <div className="section-head">
+              <div>
+                <div className="kicker">VOLUNTEER WORK</div>
+                <h2>فعالیت‌های داوطلبانه</h2>
+              </div>
+              <p>مشارکت در جامعه نرم‌افزار آزاد، برگزاری رویدادها و کارگاه‌های آموزشی.</p>
+            </div>
+            <div className="timeline volunteer-timeline" dir="rtl">
+              {volunteerActivities.map((activity) => (
+                <div className="experience-item volunteer-item" key={`${activity.title}-${activity.date}`}>
+                  <article className="panel volunteer-card">
+                    <div className="volunteer-title">{activity.title}</div>
+                    <div className="job-date volunteer-date" dir="rtl"><bdi>{activity.date}</bdi></div>
+                  </article>
+                </div>
+              ))}
             </div>
           </div>
         </section>
