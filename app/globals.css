@@ -122,6 +122,7 @@ footer { padding: 30px 0 45px; border-top: 1px solid var(--line); color: var(--m
 .volunteer-title { font-weight: 700; direction: rtl; text-align: right; }
 .volunteer-date { flex: 0 0 auto; }
 .print-resume-header { display: none; }
+.print-resume-document { display: none; }
 
 @media print {
   @page { size: A4; margin: 12mm 13mm; }
