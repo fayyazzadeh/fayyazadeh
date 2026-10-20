@@ -124,32 +124,37 @@ footer { padding: 30px 0 45px; border-top: 1px solid var(--line); color: var(--m
 .print-resume-header { display: none; }
 
 @media print {
-  @page { size: A4; margin: 14mm 13mm; }
+  @page { size: A4; margin: 12mm 13mm; }
   html, body, .page-shell { background: #fff !important; color: #172026 !important; overflow: visible !important; }
-  body { font-size: 10pt; line-height: 1.65; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { font-size: 9.5pt; line-height: 1.5; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page-shell { padding: 0 !important; margin: 0 !important; }
   .container { width: 100% !important; max-width: none !important; }
-  .topbar, .hero, .contact-form, .cf-turnstile, footer, .resume-download, .actions { display: none !important; }
-  .print-resume-header { display: block !important; text-align: right; border-bottom: 2px solid #087e8b; padding-bottom: 8mm; margin-bottom: 4mm; }
-  .print-resume-header h1 { margin: 0; font-size: 22pt; }
-  .print-resume-header p { margin: 2px 0 0; font-size: 9pt; }
-  section { padding: 7mm 0 !important; scroll-margin: 0 !important; break-inside: auto; }
-  .section-head { margin-bottom: 4mm !important; gap: 3mm !important; }
-  .section-head h2 { font-size: 16pt !important; color: #075d66 !important; }
-  .section-head p, .about-copy, .job-body, .job-date, .course p, .volunteer-date { color: #39474c !important; }
-  .panel, details, .volunteer-card, .course { background: #fff !important; color: #172026 !important; box-shadow: none !important; border-color: #cbd5d8 !important; }
-  .about-grid, .skill-groups, .courses, .contact-grid { display: block !important; }
-  .about-copy, .skill-group, .course, .volunteer-card, summary, .job-body { padding: 3mm 4mm !important; }
-  .stats { display: none !important; }
-  .skill-group, .course, .volunteer-item, .experience-item { break-inside: avoid; }
-  .skill-group, .course { margin-bottom: 3mm; }
-  .tag { color: #172026 !important; background: #f2f7f8 !important; border-color: #cbd5d8 !important; }
-  .timeline::before, .experience-item::before { display: none !important; }
-  .experience-item { padding-right: 0 !important; margin-bottom: 3mm !important; }
-  .job-company { color: #075d66 !important; }
-  details > summary { display: grid !important; }
-  details:not([open]) > .job-body { display: block !important; }
-  .contact-links { display: flex !important; flex-wrap: wrap; gap: 3mm !important; }
-  .contact-link { display: block !important; padding: 3mm !important; box-shadow: none !important; }
-  .contact-link span { color: #39474c !important; }
-  a { color: #075d66 !important; }
+  .topbar, .hero, .contact-form, .cf-turnstile, footer, .resume-download, .actions, .print-resume-header,
+  .page-shell > section { display: none !important; }
+  .print-resume-document { display: block !important; direction: rtl; color: #172026 !important; font-family: inherit; }
+  .cv-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8mm; border-bottom: 2px solid #087e8b; padding-bottom: 5mm; margin-bottom: 5mm; }
+  .cv-header h1 { margin: 0 0 1.5mm; font-size: 23pt; line-height: 1.25; color: #075d66 !important; }
+  .cv-role { margin: 0; font-size: 11pt; font-weight: 700; }
+  .cv-contact { display: flex; flex-direction: column; gap: 1mm; text-align: left; font-size: 8.5pt; }
+  .cv-section { padding: 0 !important; margin: 0 0 5mm !important; break-inside: auto; }
+  .cv-section h2 { color: #075d66 !important; font-size: 13pt; border-bottom: 1px solid #cbd5d8; padding-bottom: 1.5mm; margin: 0 0 2.5mm; }
+  .cv-section p { margin: 1mm 0 0; }
+  .cv-experience { margin-bottom: 3mm; padding-bottom: 2mm; border-bottom: 1px solid #e1e7e9; break-inside: avoid; }
+  .cv-experience:last-child { border-bottom: 0; }
+  .cv-experience-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 5mm; }
+  .cv-experience-heading strong { font-size: 10pt; }
+  .cv-experience-heading bdi { white-space: nowrap; font-size: 8.5pt; color: #39474c !important; }
+  .cv-company { color: #075d66 !important; font-weight: 700; }
+  .cv-experience p { font-size: 8.8pt; }
+  .cv-skills { display: grid; grid-template-columns: 1fr 1fr; gap: 2mm 5mm; }
+  .cv-skill-group { break-inside: avoid; }
+  .cv-skill-group strong { display: block; color: #075d66 !important; font-size: 9pt; }
+  .cv-skill-group span { display: block; font-size: 8.5pt; }
+  .cv-volunteer-list { display: grid; grid-template-columns: 1fr 1fr; gap: 2mm 5mm; }
+  .cv-volunteer { display: flex; flex-direction: column; gap: 1mm; padding: 2mm; border-right: 2px solid #087e8b; background: #f6f9fa !important; break-inside: avoid; }
+  .cv-volunteer span { font-size: 8.5pt; font-weight: 600; }
+  .cv-volunteer bdi { font-size: 8pt; color: #39474c !important; }
+  .cv-courses { columns: 2; column-gap: 8mm; margin: 0; padding-right: 5mm; }
+  .cv-courses li { margin-bottom: 1.5mm; break-inside: avoid; font-size: 8.5pt; }
+  a { color: #075d66 !important; text-decoration: none !important; }
 }
