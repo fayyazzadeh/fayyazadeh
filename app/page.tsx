@@ -211,6 +211,57 @@ export default function Home() {
       />
 
       <main className="page-shell">
+        <article className="print-resume-document" dir="rtl" aria-label="نسخه قابل چاپ رزومه">
+          <header className="cv-header">
+            <div>
+              <h1>رامین فیاض‌زاده</h1>
+              <p className="cv-role">متخصص فناوری اطلاعات | شبکه و زیرساخت</p>
+            </div>
+            <div className="cv-contact" dir="ltr">
+              <span>ramin@fayyazzadeh.ir</span>
+              <span>fayyazzadeh.ir</span>
+              <span>github.com/fayyazzadeh</span>
+            </div>
+          </header>
+          <section className="cv-section">
+            <h2>خلاصه حرفه‌ای</h2>
+            <p>متخصص فناوری اطلاعات با بیش از ۱۵ سال تجربه در پشتیبانی فنی، شبکه و زیرساخت، مدیریت سرورها، مجازی‌سازی، سخت‌افزار و سیستم‌های سازمانی. دارای تجربه در مدیریت وب‌سایت و طراحی وب، عیب‌یابی و نگهداری زیرساخت‌های فناوری اطلاعات.</p>
+          </section>
+          <section className="cv-section">
+            <h2>سوابق کاری</h2>
+            <div className="cv-experiences">
+              {experiences.map(([title, company, date, description]) => (
+                <article className="cv-experience" key={`cv-${company}-${date}-${title}`}>
+                  <div className="cv-experience-heading"><strong>{title}</strong><bdi>{date}</bdi></div>
+                  <div className="cv-company">{company}</div>
+                  <p>{description}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+          <section className="cv-section">
+            <h2>مهارت‌های تخصصی</h2>
+            <div className="cv-skills">
+              {skillGroups.map(([title, skills]) => (
+                <div className="cv-skill-group" key={title}><strong>{title}</strong><span>{skills.join("، ")}</span></div>
+              ))}
+            </div>
+          </section>
+          <section className="cv-section">
+            <h2>فعالیت‌های داوطلبانه</h2>
+            <div className="cv-volunteer-list">
+              {volunteerActivities.map((activity) => (
+                <article className="cv-volunteer" key={`cv-${activity.title}-${activity.date}`}><span>{activity.title}</span><bdi>{activity.date}</bdi></article>
+              ))}
+            </div>
+          </section>
+          <section className="cv-section">
+            <h2>دوره‌ها و آموزش‌ها</h2>
+            <ul className="cv-courses">
+              {courses.map(([code, description]) => <li key={`cv-${code}`}><strong>{code}</strong> — {description}</li>)}
+            </ul>
+          </section>
+        </article>
         <div className="print-resume-header" dir="rtl">
           <h1>رامین فیاض‌زاده</h1>
           <p>متخصص فناوری اطلاعات | شبکه و زیرساخت</p>
