@@ -83,6 +83,8 @@ const experiences = [
   ],
 ] as const;
 
+import volunteerActivities from "@/data/volunteer-activities.json";
+
 type SkillGroup = readonly [string, readonly string[]];
 
 const skillGroups: readonly SkillGroup[] = [
@@ -199,6 +201,7 @@ export default function Home() {
               <a href="#about">درباره من</a>
               <a href="#skills">مهارت‌ها</a>
               <a href="#experience">سوابق</a>
+              <a href="#volunteer">فعالیت‌ها</a>
               <a href="#courses">دوره‌ها</a>
               <a href="#contact">تماس</a>
               <a href="/wiki">ویکی</a>
@@ -228,6 +231,7 @@ export default function Home() {
               <a href="#about" onClick={closeMobileMenu}>درباره من</a>
               <a href="#skills" onClick={closeMobileMenu}>مهارت‌ها</a>
               <a href="#experience" onClick={closeMobileMenu}>سوابق</a>
+              <a href="#volunteer" onClick={closeMobileMenu}>فعالیت‌ها</a>
               <a href="#courses" onClick={closeMobileMenu}>دوره‌ها</a>
               <a href="#contact" onClick={closeMobileMenu}>تماس</a>
               <a href="/wiki" onClick={closeMobileMenu}>ویکی</a>
@@ -443,6 +447,48 @@ export default function Home() {
                   </div>
                 )
               )}
+            </div>
+          </div>
+        </section>
+
+
+        <section id="volunteer">
+          <div className="container">
+            <div className="section-head">
+              <div>
+                <div className="kicker">COMMUNITY & VOLUNTEERING</div>
+                <h2>فعالیت‌های داوطلبانه</h2>
+              </div>
+              <p>مشارکت در رویدادها، کارگاه‌ها و جامعهٔ نرم‌افزار آزاد و متن‌باز.</p>
+            </div>
+            <div className="volunteer-list" dir="rtl">
+              {[...volunteerActivities]
+                .sort((a, b) => {
+                  const aOngoing = a.date.includes("تاکنون");
+                  const bOngoing = b.date.includes("تاکنون");
+                  if (aOngoing !== bOngoing) return aOngoing ? -1 : 1;
+
+                  const toPersianYear = (date: string) => {
+                    const match = date.match(/[۰-۹]{3,4}/);
+                    if (!match) return 0;
+                    return Number(
+                      match[0].replace(/[۰-۹]/g, (digit) =>
+                        String("۰۱۲۳۴۵۶۷۸۹".indexOf(digit)),
+                      ),
+                    );
+                  };
+
+                  return toPersianYear(b.date) - toPersianYear(a.date);
+                })
+                .map((activity, index) => (
+                <article className="panel volunteer-card" key={`${activity.title}-${activity.date}-${index}`}>
+                  <span className="volunteer-marker" aria-hidden="true">■</span>
+                  <div className="volunteer-content">
+                    <h3>{activity.title}</h3>
+                    <p>{activity.date}</p>
+                  </div>
+                </article>
+              ))}
             </div>
           </div>
         </section>
