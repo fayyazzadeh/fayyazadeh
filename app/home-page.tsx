@@ -462,7 +462,25 @@ export default function Home() {
               <p>مشارکت در رویدادها، کارگاه‌ها و جامعهٔ نرم‌افزار آزاد و متن‌باز.</p>
             </div>
             <div className="volunteer-list" dir="rtl">
-              {volunteerActivities.map((activity, index) => (
+              {[...volunteerActivities]
+                .sort((a, b) => {
+                  const aOngoing = a.date.includes("تاکنون");
+                  const bOngoing = b.date.includes("تاکنون");
+                  if (aOngoing !== bOngoing) return aOngoing ? -1 : 1;
+
+                  const toPersianYear = (date: string) => {
+                    const match = date.match(/[۰-۹]{3,4}/);
+                    if (!match) return 0;
+                    return Number(
+                      match[0].replace(/[۰-۹]/g, (digit) =>
+                        String("۰۱۲۳۴۵۶۷۸۹".indexOf(digit)),
+                      ),
+                    );
+                  };
+
+                  return toPersianYear(b.date) - toPersianYear(a.date);
+                })
+                .map((activity, index) => (
                 <article className="panel volunteer-card" key={`${activity.title}-${activity.date}-${index}`}>
                   <span className="volunteer-marker" aria-hidden="true">■</span>
                   <div className="volunteer-content">
