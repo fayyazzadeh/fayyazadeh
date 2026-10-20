@@ -83,6 +83,21 @@ const experiences = [
   ],
 ] as const;
 
+const volunteerActivities = [
+  { title: "عضو تیم هماهنگی و برگزارکننده جلسات گروه کاربران لینوکس تهران (تهلاگ)", date: "۱۳۹۴ تاکنون · ۲۰۱۵ تاکنون" },
+  { title: "برگزاری کارگاه‌های Install Fest در گروه کاربران لینوکس تهران", date: "۱۳۹۵ تاکنون · ۲۰۱۶ تاکنون" },
+  { title: "عضو تیم اجرایی جشن آزادی نرم‌افزار در دانشگاه شریف", date: "۱۳۹۴ · ۲۰۱۵" },
+  { title: "عضو تیم اجرایی جشن پانصدهزارمین مقاله ویکی‌پدیای فارسی در کتابخانه ملی", date: "۱۳۹۵ · ۲۰۱۶" },
+  { title: "عضو تیم اجرایی هشتمین جشنواره ملی لینوکس و نرم‌افزارهای متن‌باز امیرکبیر", date: "۱۳۹۵ · ۲۰۱۶" },
+  { title: "عضو تیم اجرایی جشن آزادی نرم‌افزار در دانشگاه شریف", date: "۱۳۹۵ · ۲۰۱۶" },
+  { title: "عضو تیم اجرایی نهمین جشنواره ملی لینوکس و نرم‌افزارهای متن‌باز امیرکبیر", date: "۱۳۹۶ · ۲۰۱۷" },
+  { title: "عضو تیم اجرایی چهارمین گردهمایی بزرگ سالانه رایانش ابری در پژوهشکده ارتباطات", date: "۱۳۹۷ · ۲۰۱۸" },
+  { title: "عضو تیم اجرایی جشن آزادی نرم‌افزار در رهنما کالج", date: "۱۳۹۷ · ۲۰۱۸" },
+  { title: "برگزاری کارگاه‌های Install Fest و آشنایی با رزبری‌پای و سخت‌افزار آزاد در دانشگاه صنعتی اصفهان", date: "۱۳۹۷ · ۲۰۱۸" },
+  { title: "عضو تیم اجرایی جشن آزادی نرم‌افزار در باغ کتاب", date: "۱۳۹۸ · ۲۰۱۹" },
+  { title: "برگزاری کارگاه‌های Install Fest در جشن انتشار اوبونتو 19.10 در دانشگاه اراک", date: "۱۳۹۸ · ۲۰۱۹" },
+];
+
 type SkillGroup = readonly [string, readonly string[]];
 
 const skillGroups: readonly SkillGroup[] = [
@@ -199,6 +214,7 @@ export default function Home() {
               <a href="#about">درباره من</a>
               <a href="#skills">مهارت‌ها</a>
               <a href="#experience">سوابق</a>
+              <a href="#volunteer">فعالیت‌ها</a>
               <a href="#courses">دوره‌ها</a>
               <a href="#contact">تماس</a>
               <a href="/wiki">ویکی</a>
@@ -228,6 +244,7 @@ export default function Home() {
               <a href="#about" onClick={closeMobileMenu}>درباره من</a>
               <a href="#skills" onClick={closeMobileMenu}>مهارت‌ها</a>
               <a href="#experience" onClick={closeMobileMenu}>سوابق</a>
+              <a href="#volunteer" onClick={closeMobileMenu}>فعالیت‌ها</a>
               <a href="#courses" onClick={closeMobileMenu}>دوره‌ها</a>
               <a href="#contact" onClick={closeMobileMenu}>تماس</a>
               <a href="/wiki" onClick={closeMobileMenu}>ویکی</a>
@@ -443,6 +460,30 @@ export default function Home() {
                   </div>
                 )
               )}
+            </div>
+          </div>
+        </section>
+
+
+        <section id="volunteer">
+          <div className="container">
+            <div className="section-head">
+              <div>
+                <div className="kicker">COMMUNITY & VOLUNTEERING</div>
+                <h2>فعالیت‌های داوطلبانه</h2>
+              </div>
+              <p>مشارکت در رویدادها، کارگاه‌ها و جامعهٔ نرم‌افزار آزاد و متن‌باز.</p>
+            </div>
+            <div className="volunteer-list" dir="rtl">
+              {volunteerActivities.map((activity, index) => (
+                <article className="panel volunteer-card" key={`${activity.title}-${activity.date}-${index}`}>
+                  <span className="volunteer-marker" aria-hidden="true">■</span>
+                  <div className="volunteer-content">
+                    <h3>{activity.title}</h3>
+                    <p>{activity.date}</p>
+                  </div>
+                </article>
+              ))}
             </div>
           </div>
         </section>
