@@ -125,37 +125,20 @@ footer { padding: 30px 0 45px; border-top: 1px solid var(--line); color: var(--m
 .print-resume-document { display: none; }
 
 @media print {
-  @page { size: A4; margin: 12mm 13mm; }
-  html, body, .page-shell { background: #fff !important; color: #172026 !important; overflow: visible !important; }
-  body { font-size: 9.5pt; line-height: 1.5; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .page-shell { padding: 0 !important; margin: 0 !important; }
-  .container { width: 100% !important; max-width: none !important; }
-  .topbar, .hero, .contact-form, .cf-turnstile, footer, .resume-download, .actions, .print-resume-header,
-  .page-shell > section { display: none !important; }
-  .print-resume-document { display: block !important; direction: rtl; color: #172026 !important; font-family: inherit; }
-  .cv-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8mm; border-bottom: 2px solid #087e8b; padding-bottom: 5mm; margin-bottom: 5mm; }
-  .cv-header h1 { margin: 0 0 1.5mm; font-size: 23pt; line-height: 1.25; color: #075d66 !important; }
-  .cv-role { margin: 0; font-size: 11pt; font-weight: 700; }
-  .cv-contact { display: flex; flex-direction: column; gap: 1mm; text-align: left; font-size: 8.5pt; }
-  .cv-section { padding: 0 !important; margin: 0 0 5mm !important; break-inside: auto; }
-  .cv-section h2 { color: #075d66 !important; font-size: 13pt; border-bottom: 1px solid #cbd5d8; padding-bottom: 1.5mm; margin: 0 0 2.5mm; }
-  .cv-section p { margin: 1mm 0 0; }
-  .cv-experience { margin-bottom: 3mm; padding-bottom: 2mm; border-bottom: 1px solid #e1e7e9; break-inside: avoid; }
-  .cv-experience:last-child { border-bottom: 0; }
-  .cv-experience-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 5mm; }
-  .cv-experience-heading strong { font-size: 10pt; }
-  .cv-experience-heading bdi { white-space: nowrap; font-size: 8.5pt; color: #39474c !important; }
-  .cv-company { color: #075d66 !important; font-weight: 700; }
-  .cv-experience p { font-size: 8.8pt; }
-  .cv-skills { display: grid; grid-template-columns: 1fr 1fr; gap: 2mm 5mm; }
-  .cv-skill-group { break-inside: avoid; }
-  .cv-skill-group strong { display: block; color: #075d66 !important; font-size: 9pt; }
-  .cv-skill-group span { display: block; font-size: 8.5pt; }
-  .cv-volunteer-list { display: grid; grid-template-columns: 1fr 1fr; gap: 2mm 5mm; }
-  .cv-volunteer { display: flex; flex-direction: column; gap: 1mm; padding: 2mm; border-right: 2px solid #087e8b; background: #f6f9fa !important; break-inside: avoid; }
-  .cv-volunteer span { font-size: 8.5pt; font-weight: 600; }
-  .cv-volunteer bdi { font-size: 8pt; color: #39474c !important; }
-  .cv-courses { columns: 2; column-gap: 8mm; margin: 0; padding-right: 5mm; }
-  .cv-courses li { margin-bottom: 1.5mm; break-inside: avoid; font-size: 8.5pt; }
-  a { color: #075d66 !important; text-decoration: none !important; }
+@page{size:A4 portrait;margin:0}
+html,body,.page-shell{background:#fff!important;color:#18252d!important;overflow:visible!important}body{margin:0!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page-shell{padding:0!important;margin:0!important}.container{width:100%!important;max-width:none!important}
+.topbar,.hero,.contact-form,.cf-turnstile,footer,.resume-download,.actions,.print-resume-header,.page-shell>section{display:none!important}
+.print-resume-document{display:block!important;direction:rtl;font-family:Vazirmatn,Sahel,sans-serif!important}
+.cv-page{position:relative;box-sizing:border-box;width:210mm;height:297mm;padding:13mm 15mm 15mm;overflow:hidden;page-break-after:always;break-after:page;background:#fff!important}.cv-page:last-child{page-break-after:auto;break-after:auto}
+.cv-header{display:grid;grid-template-columns:1fr 29mm 48mm;align-items:center;gap:5mm;border-bottom:1mm solid #1878ad;padding-bottom:5mm;margin-bottom:5mm}
+.cv-identity h1{margin:0;font-size:25pt;color:#1676ad!important}.cv-role{font-size:10pt;font-weight:bold;direction:ltr}.cv-tagline{font-size:8pt}.cv-photo{width:27mm;height:27mm;object-fit:cover;border-radius:50%}.cv-contact{display:flex;flex-direction:column;gap:1mm;text-align:left;font-size:7.5pt}
+.cv-section{margin:0 0 4mm!important}.cv-section h2,.cv-notes h2{color:#1676ad!important;font-size:13pt;border-bottom:.3mm solid #a9cbdc;margin:0 0 2mm;padding-bottom:1mm}
+.cv-experience{margin-bottom:2mm;padding-bottom:1.5mm;border-bottom:.25mm solid #e0e8ec;break-inside:avoid}.cv-experience-heading{display:flex;justify-content:space-between;gap:4mm}.cv-experience-heading strong{font-size:9pt}.cv-experience-heading bdi{font-size:7.5pt;white-space:nowrap}.cv-company{color:#1676ad!important;font-weight:bold;font-size:8pt}.cv-experience p{font-size:7.8pt;line-height:1.4}
+.cv-skills{display:grid;grid-template-columns:1fr 1fr;gap:3mm 5mm}.cv-skill-group>strong{display:block;color:#1676ad!important;font-size:9pt}.cv-skill-group>span{display:grid;grid-template-columns:1fr 1fr;gap:1mm}.cv-skill-item{display:flex;gap:1mm;font-size:7.5pt}.cv-skill-item i{width:1.8mm;height:1.8mm;background:#2487bb!important;flex-shrink:0}
+.cv-volunteer-list{display:grid;grid-template-columns:1fr 1fr;gap:2mm 4mm}.cv-volunteer{display:flex;flex-direction:column;gap:1mm;padding:2mm;border-right:1mm solid #2585b7;background:#f2f8fb!important;break-inside:avoid;min-height:14mm}.cv-volunteer span{font-size:8pt;font-weight:600}.cv-volunteer bdi{font-size:7pt}
+.cv-courses{padding-right:5mm}.cv-courses li{display:flex;flex-direction:column;margin-bottom:2mm;font-size:8pt;break-inside:avoid}.cv-courses li strong,.cv-fact-grid strong{color:#1676ad!important}.cv-courses li span,.cv-fact-grid span{font-size:7.8pt}
+.cv-fact-grid{display:grid;grid-template-columns:1fr 1fr;gap:3mm}.cv-fact-grid div{display:flex;flex-direction:column;padding:2mm;border-bottom:.3mm solid #d7e5ec}.cv-links{display:grid;grid-template-columns:1fr 1fr;gap:3mm;direction:ltr;text-align:left;font-size:9pt}
+.cv-notes{margin-top:5mm;padding:5mm;border-radius:4mm;background:#edf7fc!important;border:.4mm solid #d4eaf5}.cv-notes h2{border:0}.cv-notes p{font-size:9pt;line-height:1.7}.cv-quote-mark{float:left;color:#2585b7!important;font-size:30pt}
+.cv-page-footer{position:absolute;bottom:6mm;left:15mm;right:15mm;display:flex;justify-content:space-between;border-top:.25mm solid #d7e5ec;padding-top:2mm;font-size:7pt;color:#6c7d86!important}a{color:#1676ad!important;text-decoration:none!important}
 }
