@@ -114,3 +114,13 @@ footer { padding: 30px 0 45px; border-top: 1px solid var(--line); color: var(--m
   direction: rtl;
   text-align: right;
 }
+
+
+/* Volunteer activities section */
+.volunteer-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.volunteer-card { display: flex; align-items: flex-start; gap: 12px; padding: 18px 20px; }
+.volunteer-marker { flex: 0 0 auto; margin-top: 4px; color: var(--cyan); font-size: .72rem; }
+.volunteer-content { min-width: 0; }
+.volunteer-content h3 { margin: 0; font-size: .92rem; line-height: 1.8; color: var(--text); }
+.volunteer-content p { margin: 6px 0 0; color: var(--muted); font-size: .78rem; }
+@media (max-width: 700px) { .volunteer-list { grid-template-columns: 1fr; } .volunteer-card { padding: 16px; } }
