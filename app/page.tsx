@@ -212,54 +212,33 @@ export default function Home() {
 
       <main className="page-shell">
         <article className="print-resume-document" dir="rtl" aria-label="نسخه قابل چاپ رزومه">
-          <header className="cv-header">
-            <div>
-              <h1>رامین فیاض‌زاده</h1>
-              <p className="cv-role">متخصص فناوری اطلاعات | شبکه و زیرساخت</p>
-            </div>
-            <div className="cv-contact" dir="ltr">
-              <span>ramin@fayyazzadeh.ir</span>
-              <span>fayyazzadeh.ir</span>
-              <span>github.com/fayyazzadeh</span>
-            </div>
-          </header>
-          <section className="cv-section">
-            <h2>خلاصه حرفه‌ای</h2>
-            <p>متخصص فناوری اطلاعات با بیش از ۱۵ سال تجربه در پشتیبانی فنی، شبکه و زیرساخت، مدیریت سرورها، مجازی‌سازی، سخت‌افزار و سیستم‌های سازمانی. دارای تجربه در مدیریت وب‌سایت و طراحی وب، عیب‌یابی و نگهداری زیرساخت‌های فناوری اطلاعات.</p>
+          <section className="cv-page cv-page-one">
+            <header className="cv-header">
+              <div className="cv-identity"><h1>رامین فیاض‌زاده</h1><p className="cv-role">IT Specialist | Network &amp; Infrastructure</p><p className="cv-tagline">متخصص فناوری اطلاعات، شبکه و زیرساخت با بیش از ۱۵ سال تجربه</p></div>
+              <img className="cv-photo" src="/profile-tech-headshot.jpg" alt="رامین فیاض‌زاده" />
+              <div className="cv-contact" dir="ltr"><span>ramin@fayyazzadeh.ir</span><span>fayyazzadeh.ir</span><span>github.com/fayyazzadeh</span><span>t.me/fayyazzadeh</span></div>
+            </header>
+            <section className="cv-section"><h2>خلاصه حرفه‌ای</h2><p>متخصص فناوری اطلاعات با بیش از ۱۵ سال تجربه در پشتیبانی فنی، شبکه و زیرساخت، مدیریت سرورها، مجازی‌سازی، سخت‌افزار و سیستم‌های سازمانی. دارای تجربه در نگهداری سرویس‌های سازمانی، عیب‌یابی، مدیریت وب‌سایت و طراحی وب.</p></section>
+            <section className="cv-section"><h2>سوابق کاری</h2><div className="cv-experiences">{experiences.slice(0, 6).map(([title, company, date, description]) => <article className="cv-experience" key={`cv-${company}-${date}-${title}`}><div className="cv-experience-heading"><strong>{title}</strong><bdi>{date}</bdi></div><div className="cv-company">{company}</div><p>{description}</p></article>)}</div></section>
+            <div className="cv-page-footer"><span>fayyazzadeh.ir</span><span>۱ از ۴</span></div>
           </section>
-          <section className="cv-section">
-            <h2>سوابق کاری</h2>
-            <div className="cv-experiences">
-              {experiences.map(([title, company, date, description]) => (
-                <article className="cv-experience" key={`cv-${company}-${date}-${title}`}>
-                  <div className="cv-experience-heading"><strong>{title}</strong><bdi>{date}</bdi></div>
-                  <div className="cv-company">{company}</div>
-                  <p>{description}</p>
-                </article>
-              ))}
-            </div>
+          <section className="cv-page cv-page-two">
+            <section className="cv-section"><h2>سوابق کاری | ادامه</h2><div className="cv-experiences">{experiences.slice(6).map(([title, company, date, description]) => <article className="cv-experience" key={`cv-${company}-${date}-${title}`}><div className="cv-experience-heading"><strong>{title}</strong><bdi>{date}</bdi></div><div className="cv-company">{company}</div><p>{description}</p></article>)}</div></section>
+            <section className="cv-section"><h2>مهارت‌های تخصصی</h2><div className="cv-skills">{skillGroups.map(([title, skills]) => <div className="cv-skill-group" key={title}><strong>{title}</strong><span>{skills.map(skill => <span className="cv-skill-item" key={skill}><i aria-hidden="true" />{skill}</span>)}</span></div>)}</div></section>
+            <div className="cv-page-footer"><span>fayyazzadeh.ir</span><span>۲ از ۴</span></div>
           </section>
-          <section className="cv-section">
-            <h2>مهارت‌های تخصصی</h2>
-            <div className="cv-skills">
-              {skillGroups.map(([title, skills]) => (
-                <div className="cv-skill-group" key={title}><strong>{title}</strong><span>{skills.join("، ")}</span></div>
-              ))}
-            </div>
+          <section className="cv-page cv-page-three">
+            <section className="cv-section"><h2>فعالیت‌های داوطلبانه</h2><div className="cv-volunteer-list">{volunteerActivities.slice(0, 8).map(activity => <article className="cv-volunteer" key={`cv-${activity.title}-${activity.date}`}><span>{activity.title}</span><bdi>{activity.date}</bdi></article>)}</div></section>
+            <section className="cv-section"><h2>دوره‌ها و آموزش‌ها</h2><ul className="cv-courses">{courses.slice(0, 4).map(([code, description]) => <li key={`cv-${code}`}><strong>{code}</strong><span>{description}</span></li>)}</ul></section>
+            <section className="cv-section cv-facts"><h2>حوزه‌های تخصصی</h2><div className="cv-fact-grid"><div><strong>شبکه و زیرساخت</strong><span>Network+، CCNA، MikroTik، شبکه‌های اکتیو و پسیو</span></div><div><strong>سرور و مجازی‌سازی</strong><span>Windows Server، VMware ESXi، GNU/Linux</span></div><div><strong>پشتیبانی فنی</strong><span>عیب‌یابی، تعمیر و نگهداری سیستم‌ها و پشتیبانی کاربران</span></div><div><strong>وب</strong><span>WordPress، طراحی و مدیریت وب‌سایت</span></div></div></section>
+            <div className="cv-page-footer"><span>fayyazzadeh.ir</span><span>۳ از ۴</span></div>
           </section>
-          <section className="cv-section">
-            <h2>فعالیت‌های داوطلبانه</h2>
-            <div className="cv-volunteer-list">
-              {volunteerActivities.map((activity) => (
-                <article className="cv-volunteer" key={`cv-${activity.title}-${activity.date}`}><span>{activity.title}</span><bdi>{activity.date}</bdi></article>
-              ))}
-            </div>
-          </section>
-          <section className="cv-section">
-            <h2>دوره‌ها و آموزش‌ها</h2>
-            <ul className="cv-courses">
-              {courses.map(([code, description]) => <li key={`cv-${code}`}><strong>{code}</strong> — {description}</li>)}
-            </ul>
+          <section className="cv-page cv-page-four">
+            <section className="cv-section"><h2>فعالیت‌های داوطلبانه | ادامه</h2><div className="cv-volunteer-list">{volunteerActivities.slice(8).map(activity => <article className="cv-volunteer" key={`cv-${activity.title}-${activity.date}`}><span>{activity.title}</span><bdi>{activity.date}</bdi></article>)}</div></section>
+            <section className="cv-section"><h2>دوره‌ها و آموزش‌ها | ادامه</h2><ul className="cv-courses">{courses.slice(4).map(([code, description]) => <li key={`cv-${code}`}><strong>{code}</strong><span>{description}</span></li>)}</ul></section>
+            <section className="cv-section"><h2>لینک‌ها | نمونه‌کارها</h2><div className="cv-links"><a href="https://fayyazzadeh.ir">fayyazzadeh.ir</a><a href="https://tashtag.com">tashtag.com — طراحی وب‌سایت</a><a href="https://github.com/fayyazzadeh">github.com/fayyazzadeh</a><a href="https://t.me/fayyazzadeh">t.me/fayyazzadeh</a><a href="https://www.linkedin.com/in/ramin%D9%80fayyazzadeh">LinkedIn</a></div></section>
+            <section className="cv-notes"><span className="cv-quote-mark">“</span><h2>توضیحات</h2><p>تمرکز حرفه‌ای من بر حل مسئله، پایداری سرویس‌ها و نگهداری زیرساخت‌های فناوری اطلاعات است. در کنار تجربه عملی در شبکه، سرورها و پشتیبانی، به یادگیری مستمر و مشارکت در جامعه نرم‌افزار آزاد علاقه‌مندم. برای همکاری‌های تخصصی و فرصت‌های پاره‌وقت آماده گفتگو هستم.</p></section>
+            <div className="cv-page-footer"><span>fayyazzadeh.ir</span><span>۴ از ۴</span></div>
           </section>
         </article>
         <div className="print-resume-header" dir="rtl">
