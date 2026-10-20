@@ -16,7 +16,12 @@ const volunteerActivities = [
   { title: "برگزاری کارگاه‌های Install Fest و آشنایی با رزبری‌پای و سخت‌افزار آزاد در دانشگاه صنعتی اصفهان", date: "۱۳۹۷ · ۲۰۱۸" },
   { title: "عضو تیم اجرایی جشن آزادی نرم‌افزار در باغ کتاب", date: "۱۳۹۸ · ۲۰۱۹" },
   { title: "برگزاری کارگاه‌های Install Fest در جشن انتشار اوبونتو 19.10 در دانشگاه اراک", date: "۱۳۹۸ · ۲۰۱۹" },].sort((a, b) => {
-  const year = (date: string) => Number(date.match(/۱۳۹[۴۵۶۷۸]/)?.[0].replace("۱۳۹", "") ?? 0);
+  const year = (date: string) => {
+    const match = date.match(/[۰-۹]{4}|[0-9]{4}/)?.[0];
+    if (!match) return 0;
+    return Number(match.replace(/[۰-۹]/g, (digit) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(digit))));
+  };
+
   return year(b.date) - year(a.date);
 });
 
