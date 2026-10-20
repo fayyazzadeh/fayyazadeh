@@ -114,3 +114,42 @@ footer { padding: 30px 0 45px; border-top: 1px solid var(--line); color: var(--m
   direction: rtl;
   text-align: right;
 }
+
+
+/* Volunteer activities and print-friendly résumé PDF */
+.volunteer-timeline::before { background: linear-gradient(var(--cyan), var(--line), transparent); }
+.volunteer-card { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; padding: 18px 22px; }
+.volunteer-title { font-weight: 700; direction: rtl; text-align: right; }
+.volunteer-date { flex: 0 0 auto; }
+.print-resume-header { display: none; }
+
+@media print {
+  @page { size: A4; margin: 14mm 13mm; }
+  html, body, .page-shell { background: #fff !important; color: #172026 !important; overflow: visible !important; }
+  body { font-size: 10pt; line-height: 1.65; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .container { width: 100% !important; max-width: none !important; }
+  .topbar, .hero, .contact-form, .cf-turnstile, footer, .resume-download, .actions { display: none !important; }
+  .print-resume-header { display: block !important; text-align: right; border-bottom: 2px solid #087e8b; padding-bottom: 8mm; margin-bottom: 4mm; }
+  .print-resume-header h1 { margin: 0; font-size: 22pt; }
+  .print-resume-header p { margin: 2px 0 0; font-size: 9pt; }
+  section { padding: 7mm 0 !important; scroll-margin: 0 !important; break-inside: auto; }
+  .section-head { margin-bottom: 4mm !important; gap: 3mm !important; }
+  .section-head h2 { font-size: 16pt !important; color: #075d66 !important; }
+  .section-head p, .about-copy, .job-body, .job-date, .course p, .volunteer-date { color: #39474c !important; }
+  .panel, details, .volunteer-card, .course { background: #fff !important; color: #172026 !important; box-shadow: none !important; border-color: #cbd5d8 !important; }
+  .about-grid, .skill-groups, .courses, .contact-grid { display: block !important; }
+  .about-copy, .skill-group, .course, .volunteer-card, summary, .job-body { padding: 3mm 4mm !important; }
+  .stats { display: none !important; }
+  .skill-group, .course, .volunteer-item, .experience-item { break-inside: avoid; }
+  .skill-group, .course { margin-bottom: 3mm; }
+  .tag { color: #172026 !important; background: #f2f7f8 !important; border-color: #cbd5d8 !important; }
+  .timeline::before, .experience-item::before { display: none !important; }
+  .experience-item { padding-right: 0 !important; margin-bottom: 3mm !important; }
+  .job-company { color: #075d66 !important; }
+  details > summary { display: grid !important; }
+  details:not([open]) > .job-body { display: block !important; }
+  .contact-links { display: flex !important; flex-wrap: wrap; gap: 3mm !important; }
+  .contact-link { display: block !important; padding: 3mm !important; box-shadow: none !important; }
+  .contact-link span { color: #39474c !important; }
+  a { color: #075d66 !important; }
+}
