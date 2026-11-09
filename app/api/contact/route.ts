@@ -1,9 +1,14 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import { readJsonBody, verifyTurnstile } from "@/lib/request-security.js";
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    const parsed = await readJsonBody(request, 12_288);
+    if (!parsed.ok) {
+      return NextResponse.json({ error: parsed.error }, { status: parsed.status });
+    }
+    const body = parsed.data && typeof parsed.data === "object" ? parsed.data as Record<string, unknown> : {};
 
     const name = typeof body.name === "string" ? body.name.trim() : "";
     const email = typeof body.email === "string" ? body.email.trim() : "";
@@ -40,20 +45,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "لطفاً تأیید امنیتی را کامل کنید." }, { status: 400 });
     }
 
-    const turnstileSecret = process.env.TURNSTILE_SECRET_KEY;
-    if (!turnstileSecret) {
-      console.error("TURNSTILE_SECRET_KEY is not configured.");
-      return NextResponse.json({ error: "تنظیمات امنیتی سرور کامل نیست." }, { status: 500 });
-    }
-
-    const turnstileResponse = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ secret: turnstileSecret, response: turnstileToken }),
-    });
-
-    const turnstileResult = await turnstileResponse.json();
-    if (!turnstileResult.success) {
+    if (!(await verifyTurnstile(turnstileToken, "contact"))) {
       return NextResponse.json({ error: "تأیید امنیتی ناموفق بود. لطفاً دوباره تلاش کنید." }, { status: 400 });
     }
 

@@ -1,15 +1,20 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { searchWiki } from "@/lib/wiki";
+import { readJsonBody, verifyTurnstile } from "@/lib/request-security.js";
 
 function createTicketId() {
   const timestamp = Date.now().toString(36).toUpperCase();
-  const random = Math.random().toString(36).slice(2, 6).toUpperCase();
+  const random = crypto.randomUUID().slice(0, 8).toUpperCase();
   return `WIKI-${timestamp}-${random}`;
 }
 
 export async function POST(request: Request) {
-  const body = await request.json().catch(() => ({}));
+  const parsed = await readJsonBody(request, 8_192);
+  if (!parsed.ok) {
+    return NextResponse.json({ answer: parsed.error }, { status: parsed.status });
+  }
+  const body = parsed.data && typeof parsed.data === "object" ? parsed.data as Record<string, unknown> : {};
   const message = typeof body.message === "string" ? body.message.trim() : "";
   const submitTicket = body.submitTicket === true;
 
@@ -17,7 +22,18 @@ export async function POST(request: Request) {
     return NextResponse.json({ answer: "لطفاً سؤال یا شرح مشکل را وارد کنید." }, { status: 400 });
   }
 
+  if (message.length > 2_000) {
+    return NextResponse.json({ answer: "متن سؤال نمی‌تواند بیشتر از ۲۰۰۰ کاراکتر باشد." }, { status: 400 });
+  }
+
   if (submitTicket) {
+    const turnstileToken = typeof body.turnstileToken === "string" ? body.turnstileToken : "";
+    if (!turnstileToken) {
+      return NextResponse.json({ answer: "لطفاً تأیید امنیتی را کامل کنید." }, { status: 400 });
+    }
+    if (!(await verifyTurnstile(turnstileToken, "wiki_support"))) {
+      return NextResponse.json({ answer: "تأیید امنیتی ناموفق بود. لطفاً دوباره تلاش کنید." }, { status: 403 });
+    }
     const name = typeof body.name === "string" ? body.name.trim() : "";
     const email = typeof body.email === "string" ? body.email.trim() : "";
     const phone = typeof body.phone === "string" ? body.phone.trim() : "";
