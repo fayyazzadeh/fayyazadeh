@@ -622,7 +622,7 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="cf-turnstile" data-sitekey="0x4AAAAAAE7pG48PU_SVKf-s" data-theme="dark" data-size="flexible" data-language="auto" />
+                <div className="cf-turnstile" data-sitekey="0x4AAAAAAE7pG48PU_SVKf-s" data-action="contact" data-theme="dark" data-size="flexible" data-language="auto" />
 
                 <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="honeypot" />
 
