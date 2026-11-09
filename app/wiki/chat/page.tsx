@@ -1,10 +1,28 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Script from "next/script";
 import "../wiki.css";
 
 type Message = { role: "user" | "assistant"; text: string };
+
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (container: HTMLElement, options: {
+        sitekey: string;
+        action: string;
+        theme?: string;
+        callback: (token: string) => void;
+        "expired-callback"?: () => void;
+        "error-callback"?: () => void;
+      }) => string;
+      reset: (widgetId?: string) => void;
+      remove: (widgetId: string) => void;
+    };
+  }
+}
 
 export default function WikiChatPage() {
   const [input, setInput] = useState("");
@@ -24,6 +42,28 @@ export default function WikiChatPage() {
   const [phone, setPhone] = useState("");
 
   const [confirmingContact, setConfirmingContact] = useState(false);
+  const [turnstileReady, setTurnstileReady] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const turnstileContainerRef = useRef<HTMLDivElement>(null);
+  const turnstileWidgetRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!contactOpen || !turnstileReady || !turnstileContainerRef.current || !window.turnstile || turnstileWidgetRef.current) return;
+    turnstileWidgetRef.current = window.turnstile.render(turnstileContainerRef.current, {
+      sitekey: "0x4AAAAAAE7pG48PU_SVKf-s",
+      action: "wiki_support",
+      theme: "dark",
+      callback: setTurnstileToken,
+      "expired-callback": () => setTurnstileToken(""),
+      "error-callback": () => setTurnstileToken(""),
+    });
+    return () => {
+      if (turnstileWidgetRef.current && window.turnstile) {
+        window.turnstile.remove(turnstileWidgetRef.current);
+        turnstileWidgetRef.current = null;
+      }
+    };
+  }, [contactOpen, turnstileReady]);
 
   async function send(event: FormEvent) {
     event.preventDefault();
@@ -161,6 +201,10 @@ export default function WikiChatPage() {
 
   async function confirmContact() {
     if (!pendingQuestion || busy) return;
+    if (!turnstileToken) {
+      setMessages((current) => [...current, { role: "assistant", text: "لطفاً ابتدا تأیید امنیتی را کامل کنید." }]);
+      return;
+    }
 
     const trimmedName = name.trim();
     const trimmedEmail = email.trim();
@@ -180,6 +224,7 @@ export default function WikiChatPage() {
           name: trimmedName,
           email: trimmedEmail,
           phone: trimmedPhone,
+          turnstileToken,
         }),
       });
 
@@ -223,11 +268,15 @@ export default function WikiChatPage() {
       ]);
     } finally {
       setBusy(false);
+      if (turnstileWidgetRef.current && window.turnstile) window.turnstile.reset(turnstileWidgetRef.current);
+      setTurnstileToken("");
     }
   }
 
   return (
-    <main className="wiki-shell chat-shell">
+    <>
+      <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" strategy="afterInteractive" onLoad={() => setTurnstileReady(true)} />
+      <main className="wiki-shell chat-shell">
       <header className="article-top">
         <Link href="/wiki">← دانش‌نامه</Link>
         <Link href="/">fayyazzadeh.ir</Link>
@@ -300,6 +349,8 @@ export default function WikiChatPage() {
               maxLength={20}
               inputMode="tel"
             />
+
+            <div ref={turnstileContainerRef} className="turnstile-container" />
 
             <button type="submit" disabled={busy}>
               بررسی اطلاعات
@@ -383,6 +434,7 @@ export default function WikiChatPage() {
           </button>
         </form>
       </section>
-    </main>
+      </main>
+    </>
   );
 }
