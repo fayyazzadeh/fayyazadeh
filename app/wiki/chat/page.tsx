@@ -303,6 +303,8 @@ export default function WikiChatPage() {
           ))}
         </div>
 
+        {contactOpen && <div ref={turnstileContainerRef} className="turnstile-container" />}
+
         {contactOpen && !confirmingContact && (
           <form
             className="contact-ticket-form"
@@ -349,8 +351,6 @@ export default function WikiChatPage() {
               maxLength={20}
               inputMode="tel"
             />
-
-            <div ref={turnstileContainerRef} className="turnstile-container" />
 
             <button type="submit" disabled={busy}>
               بررسی اطلاعات
