@@ -424,6 +424,7 @@ export default function WikiChatPage() {
               setInput(event.target.value)
             }
             placeholder="مشکل یا سؤال فنی را بنویس..."
+            maxLength={2000}
             disabled={busy}
           />
 
