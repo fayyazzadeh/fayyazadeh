@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { searchWiki } from "@/lib/wiki";
 import { readJsonBody, verifyTurnstile } from "@/lib/request-security.js";
+import { checkRateLimit } from "@/lib/rate-limit.js";
 
 function createTicketId() {
   const timestamp = Date.now().toString(36).toUpperCase();
@@ -10,6 +11,20 @@ function createTicketId() {
 }
 
 export async function POST(request: Request) {
+  const rate = await checkRateLimit(request, { identifier: "wiki-chat", limit: 20, windowMs: 60_000 });
+  if (rate.status === "unavailable") {
+    return NextResponse.json(
+      { answer: "سرویس امنیتی موقتاً در دسترس نیست. لطفاً کمی بعد دوباره تلاش کنید." },
+      { status: 503, headers: { "Retry-After": "30", "Cache-Control": "no-store" } },
+    );
+  }
+  if (rate.status === "limited") {
+    return NextResponse.json(
+      { answer: "تعداد درخواست‌ها بیش از حد مجاز است. لطفاً کمی بعد دوباره تلاش کنید." },
+      { status: 429, headers: { "Retry-After": String(rate.retryAfter), "Cache-Control": "no-store" } },
+    );
+  }
+
   const parsed = await readJsonBody(request, 8_192);
   if (!parsed.ok) {
     return NextResponse.json({ answer: parsed.error }, { status: parsed.status });
@@ -17,6 +32,22 @@ export async function POST(request: Request) {
   const body = parsed.data && typeof parsed.data === "object" ? parsed.data as Record<string, unknown> : {};
   const message = typeof body.message === "string" ? body.message.trim() : "";
   const submitTicket = body.submitTicket === true;
+
+  if (submitTicket) {
+    const ticketRate = await checkRateLimit(request, { identifier: "wiki-support", limit: 5, windowMs: 60_000 });
+    if (ticketRate.status === "unavailable") {
+      return NextResponse.json(
+        { answer: "سرویس امنیتی موقتاً در دسترس نیست. لطفاً کمی بعد دوباره تلاش کنید." },
+        { status: 503, headers: { "Retry-After": "30", "Cache-Control": "no-store" } },
+      );
+    }
+    if (ticketRate.status === "limited") {
+      return NextResponse.json(
+        { answer: "تعداد درخواست‌های پشتیبانی بیش از حد مجاز است. لطفاً کمی بعد دوباره تلاش کنید." },
+        { status: 429, headers: { "Retry-After": String(ticketRate.retryAfter), "Cache-Control": "no-store" } },
+      );
+    }
+  }
 
   if (!message) {
     return NextResponse.json({ answer: "لطفاً سؤال یا شرح مشکل را وارد کنید." }, { status: 400 });

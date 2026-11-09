@@ -1,9 +1,24 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { readJsonBody, verifyTurnstile } from "@/lib/request-security.js";
+import { checkRateLimit } from "@/lib/rate-limit.js";
 
 export async function POST(request: Request) {
   try {
+    const rate = await checkRateLimit(request, { identifier: "contact", limit: 5, windowMs: 60_000 });
+    if (rate.status === "unavailable") {
+      return NextResponse.json(
+        { error: "سرویس امنیتی موقتاً در دسترس نیست. لطفاً کمی بعد دوباره تلاش کنید." },
+        { status: 503, headers: { "Retry-After": "30", "Cache-Control": "no-store" } },
+      );
+    }
+    if (rate.status === "limited") {
+      return NextResponse.json(
+        { error: "تعداد درخواست‌ها بیش از حد مجاز است. لطفاً کمی بعد دوباره تلاش کنید." },
+        { status: 429, headers: { "Retry-After": String(rate.retryAfter), "Cache-Control": "no-store" } },
+      );
+    }
+
     const parsed = await readJsonBody(request, 12_288);
     if (!parsed.ok) {
       return NextResponse.json({ error: parsed.error }, { status: parsed.status });
