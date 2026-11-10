@@ -21,6 +21,11 @@ export default function WikiPage() {
         <Link className="wiki-chat-link" href="/wiki/chat">💬 پرسش از دستیار</Link>
       </header>
 
+      <section className="checklist-feature">
+        <div><div className="wiki-card-meta">IT RUNBOOKS</div><h2>چک‌لیست‌های اجرایی IT</h2><p>برای نصب ویندوز، آماده‌سازی کامپیوترهای اداری و تحویل تجهیزات، مراحل را دنبال و پیشرفت را در مرورگر ذخیره کنید.</p></div>
+        <Link href="/wiki/checklists">مشاهده چک‌لیست‌ها ←</Link>
+      </section>
+
       <section className="wiki-search">
         <input
           value={query}
