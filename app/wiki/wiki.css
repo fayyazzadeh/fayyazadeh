@@ -59,3 +59,10 @@
   .checklist-actions{border:0}
   a{color:#111!important;text-decoration:none!important}
 }
+
+.checklist-feature{display:flex;align-items:center;justify-content:space-between;gap:22px;margin:28px 0 20px;padding:22px 25px;border:1px solid rgba(0,217,232,.24);border-radius:18px;background:linear-gradient(120deg,rgba(0,217,232,.08),rgba(12,28,34,.85))}
+.checklist-feature h2{font-size:1.15rem;margin:5px 0}
+.checklist-feature p{color:#9db5b8;margin:0;line-height:1.8;font-size:.88rem}
+.checklist-feature>a{flex:0 0 auto;border:1px solid rgba(0,217,232,.35);border-radius:11px;padding:11px 14px;color:#00d9e8;font-weight:800}
+@media(max-width:600px){.checklist-feature{align-items:flex-start;flex-direction:column}}
+@media print{.checklist-feature{display:none!important}}
