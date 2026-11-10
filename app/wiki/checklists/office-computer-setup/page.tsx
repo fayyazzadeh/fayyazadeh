@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import OfficeComputerChecklist from "./office-computer-checklist";
-import "../wiki.css";
+import "../../wiki.css";
 
 export const metadata: Metadata = {
   title: "چک‌لیست نصب و آماده‌سازی کامپیوتر اداری | دانش‌نامه فنی",
