@@ -39,48 +39,6 @@
 | [Cloudflare Turnstile](https://www.cloudflare.com/application-services/products/turnstile/) | کمک به جلوگیری از ارسال خودکار و مخرب فرم‌ها |
 | [Resend](https://resend.com/) | زیرساخت ارسال ایمیل |
 
-## 🚀 اجرای پروژه در محیط توسعه
-
-### پیش‌نیازها
-
-- نصب Node.js و npm
-- دسترسی به مخزن Git
-
-### دریافت کد
-
-```bash
-git clone https://github.com/fayyazzadeh/fayyazadeh.git
-cd fayyazadeh
-```
-
-### نصب وابستگی‌ها
-
-```bash
-npm install
-```
-
-### اجرای محیط توسعه
-
-```bash
-npm run dev
-```
-
-سپس نشانی زیر را در مرورگر باز کنید:
-
-```text
-http://localhost:3000
-```
-
-## 📋 فرمان‌های قابل استفاده
-
-| فرمان | توضیح |
-| --- | --- |
-| `npm run dev` | اجرای سرور توسعه |
-| `npm run build` | ساخت نسخه نهایی |
-| `npm run start` | اجرای نسخه ساخته‌شده |
-| `npm run test` | اجرای تست‌های پروژه |
-| `npm run typecheck` | بررسی خطاهای TypeScript |
-
 ## 🔐 امنیت و نگهداری
 
 امنیت وب‌سایت بخشی از فرایند توسعه و نگهداری آن است. در کد فعلی، مواردی مانند اعتبارسنجی درخواست‌های ورودی، استفاده از Cloudflare Turnstile برای فرم‌های عمومی و ارسال تیکت، و هدرهای امنیتی HTTP در نظر گرفته شده‌اند.
